@@ -1,4 +1,4 @@
-import { Transaction } from '@domain/models/transaction.entity';
+import { Transaction } from '@domain/models/transaction';
 
 export interface ITransactionProcessor {
   process(transaction: Transaction): Promise<void>;
