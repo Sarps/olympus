@@ -6,4 +6,13 @@ export class Transaction {
   amount: Amount;
   type: TransactionType;
   wallet?: Wallet;
+  partner?: Wallet;
+
+  get sender(): Wallet {
+    return this.type === TransactionType.DEBIT ? this.wallet : this.partner;
+  }
+
+  get recipient(): Wallet {
+    return this.type === TransactionType.CREDIT ? this.wallet : this.partner;
+  }
 }

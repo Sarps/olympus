@@ -10,8 +10,4 @@ export class AuthService {
   register(username: string, email: string, password: string) {
     return `${username}, ${email}, ${password}`;
   }
-
-  verify(verifyKey: string) {
-    return `This action removes a #${verifyKey} auth`;
-  }
 }

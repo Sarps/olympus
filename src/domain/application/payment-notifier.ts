@@ -1,5 +1,5 @@
-import { NotificationsPort } from '@domain/ports/out/notifications.interface';
-import { IPaymentNotifier } from '@application/payment-notifier.interface';
+import { NotificationsPort } from '@ports/out/notifications.interface';
+import { IPaymentNotifier } from '@domain/application/payment-notifier.interface';
 
 export class PaymentNotifierUseCase implements IPaymentNotifier {
   constructor(private notificationsPort: NotificationsPort) {}

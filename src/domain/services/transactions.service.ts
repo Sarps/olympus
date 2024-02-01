@@ -1,8 +1,13 @@
-import { TransactionsPort } from '@domain/ports/in/transactions.interface';
 import { Transaction } from '@domain/models/transaction';
-import { ITransactionProcessor } from '@application/transaction-processor.interface';
+import { ITransactionProcessor } from '@domain/application/transaction-processor.interface';
 
-export class TransactionsService implements TransactionsPort {
+export interface TransactionsService {
+  findByUserId(): Promise<Transaction[]>;
+  createTransaction(transaction: Transaction): Promise<string>;
+  findByIdempotencyKey(idempotencyKey: string): Promise<Transaction>;
+}
+
+export class TransactionsServiceImpl implements TransactionsService {
   constructor(private transactionProcessor: ITransactionProcessor) {}
   async findByUserId(): Promise<Transaction[]> {
     return [];
@@ -23,3 +28,5 @@ export class TransactionsService implements TransactionsPort {
     return Promise.resolve(undefined);
   }
 }
+
+export const TransactionsService = Symbol('TransactionsService');

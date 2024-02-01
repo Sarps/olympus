@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from '@infrastructure/app.module';
+import { AppModule } from '@adapters/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

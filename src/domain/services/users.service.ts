@@ -3,11 +3,11 @@ import { User } from '@domain/models/user';
 
 @Injectable()
 export class UsersService {
-  create(user: User) {
-    return `This action adds a new user ${user}`;
+  findById(): Promise<User> {
+    throw Error('Not implemented');
   }
 
-  findById() {
-    return `This action returns all users`;
+  verify(key: string) {
+    return `This action removes a #${key} auth`;
   }
 }

@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from '@domain/services/auth.service';
-import { AuthLoginDto } from '@infrastructure/rest/dto/auth-login.dto';
-import { AuthRegisterDto } from '@infrastructure/rest/dto/auth-register.dto';
+import { AuthLoginDto } from '@adapters/rest/dto/auth-login.dto';
+import { AuthRegisterDto } from '@adapters/rest/dto/auth-register.dto';
+import { LoginPort } from '@ports/in/auth/LoginPort';
+import { RegisterPort } from '@ports/in/auth/RegisterPort';
 
 @Controller('auth')
-export class AuthController {
+export class AuthController implements LoginPort, RegisterPort {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
@@ -15,10 +17,5 @@ export class AuthController {
   @Post('register')
   register(@Body() dto: AuthRegisterDto) {
     return this.authService.register(dto.username, dto.email, dto.password);
-  }
-
-  @Get('verify/:id') // TODO: Id pattern validation
-  findOne(@Param('id') id: string) {
-    return this.authService.verify(id);
   }
 }
