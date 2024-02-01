@@ -1,0 +1,69 @@
+version: "3"
+services:
+
+    postgres:
+        image: postgres:latest
+        restart: always
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: postgres
+        ports:
+            - '5432:5432'
+        networks:
+            - app
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+
+    init-db:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: [ 'npm', 'run', 'db' ]
+        environment:
+            DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
+            DATABASE_CLIENT: postgresql
+        depends_on:
+            - postgres
+
+        networks:
+            - app
+
+    api:
+        build:
+            dockerfile: Dockerfile
+            context: .
+        environment:
+            DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
+        ports:
+            - 3000:3000
+        depends_on:
+            init-db:
+                condition: service_completed_successfully
+        networks:
+            - app
+        healthcheck:
+            test: [ "CMD-SHELL", "nc -z -w5 localhost 3000 || exit 1" ]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+        depends_on:
+            - postgres
+        networks:
+            - app
+
+volumes:
+    postgres_data:
+
+networks:
+    app:
+
