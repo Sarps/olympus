@@ -2,12 +2,15 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { UsersService } from '@domain/services/users.service';
 import { VerifyUserPort } from '@ports/in/users/VerifyUserPort';
 import { UserProfilePort } from '@ports/in/users/UserProfilePort';
-import { UserWalletBalance } from '@ports/in/wallets/UserWalletBalance';
+import { UserWalletBalancePort } from '@ports/in/wallets/UserWalletBalancePort';
 import { Wallet } from '@domain/models/Wallet';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
+@ApiResponse({ status: 401, description: 'Unauthorized' })
 export class UsersController
-  implements VerifyUserPort, UserProfilePort, UserWalletBalance
+  implements VerifyUserPort, UserProfilePort, UserWalletBalancePort
 {
   constructor(private readonly usersService: UsersService) {}
 

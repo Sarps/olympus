@@ -3,11 +3,15 @@ import { DatabaseModule } from '@adapters/database/database.module';
 import { NotificationModule } from '@adapters/notification/notification.module';
 import { QueueModule } from '@adapters/queue/queue.module';
 import { AuthModule } from '@adapters/auth/auth.module';
-import { RestModule } from '@adapters/rest/rest.module';
-import { PaymentNotifierUseCase } from '@domain/application/payment-notifier';
-import { IPaymentNotifier } from '@domain/application/payment-notifier.interface';
-import { ITransactionProcessor } from '@domain/application/transaction-processor.interface';
-import { TransactionProcessorUseCase } from '@domain/application/transaction-processor';
+import { WebModule } from '@adapters/web/web.module';
+import {
+  PaymentNotifier,
+  PaymentNotifierUseCase,
+} from '@domain/application/PaymentNotifier';
+import {
+  TransactionProcessor,
+  TransactionProcessorUseCase,
+} from '@domain/application/TransactionProcessor';
 
 @Module({
   imports: [
@@ -15,12 +19,12 @@ import { TransactionProcessorUseCase } from '@domain/application/transaction-pro
     NotificationModule,
     QueueModule,
     AuthModule,
-    RestModule,
+    WebModule,
   ],
   controllers: [],
   providers: [
-    { provide: IPaymentNotifier, useClass: PaymentNotifierUseCase },
-    { provide: ITransactionProcessor, useClass: TransactionProcessorUseCase },
+    { provide: PaymentNotifier, useClass: PaymentNotifierUseCase },
+    { provide: TransactionProcessor, useClass: TransactionProcessorUseCase },
   ],
 })
 export class AppModule {}

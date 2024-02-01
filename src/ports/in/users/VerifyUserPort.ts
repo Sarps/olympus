@@ -1,3 +1,3 @@
 export interface VerifyUserPort {
-  verify(id: string);
+  verify(id: string): Promise<any>;
 }

@@ -1,14 +1,18 @@
-import { Transaction } from '@domain/models/transaction';
-import { ITransactionProcessor } from '@domain/application/transaction-processor.interface';
+import { Transaction } from "@domain/models/transaction";
+import { TransactionProcessor } from "@domain/application/TransactionProcessor";
 
 export interface TransactionsService {
   findByUserId(): Promise<Transaction[]>;
+
   createTransaction(transaction: Transaction): Promise<string>;
+
   findByIdempotencyKey(idempotencyKey: string): Promise<Transaction>;
 }
 
 export class TransactionsServiceImpl implements TransactionsService {
-  constructor(private transactionProcessor: ITransactionProcessor) {}
+  constructor(private transactionProcessor: TransactionProcessor) {
+  }
+
   async findByUserId(): Promise<Transaction[]> {
     return [];
   }
@@ -21,7 +25,7 @@ export class TransactionsServiceImpl implements TransactionsService {
     } catch (e) {
       // TODO: Update failed txn
     }
-    return 'id';
+    return "id";
   }
 
   findByIdempotencyKey(_: string): Promise<Transaction> {
@@ -29,4 +33,4 @@ export class TransactionsServiceImpl implements TransactionsService {
   }
 }
 
-export const TransactionsService = Symbol('TransactionsService');
+export const TransactionsService = Symbol("TransactionsService");

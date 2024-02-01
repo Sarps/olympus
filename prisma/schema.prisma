@@ -17,6 +17,13 @@ enum TransactionType {
   CREDIT
 }
 
+enum TransactionStatus {
+  CANCELLED
+  INITIATED
+  FAILED
+  SUCCESS
+}
+
 model User {
   id        String   @id @default(uuid())
   username  String   @unique
@@ -44,15 +51,18 @@ model Wallet {
 }
 
 model Transaction {
-  id             String          @id @default(uuid())
-  idempotencyKey String          @map("idempotency_key")
+  id             String            @id @default(uuid())
+  idempotencyKey String            @map("idempotency_key")
   type           TransactionType
   amount         Float
   currency       Currency
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
-  wallet         Wallet          @relation(fields: [walletId], references: [id])
-  walletId       String          @map("wallet_id")
+  narration      String?
+  status         TransactionStatus
+  statusReason   String?           @map("status_reason")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  wallet         Wallet            @relation(fields: [walletId], references: [id])
+  walletId       String            @map("wallet_id")
 
   @@unique([idempotencyKey, type])
   @@map("transactions")
