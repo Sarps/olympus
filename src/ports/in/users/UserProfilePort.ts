@@ -4,4 +4,4 @@ export interface UserProfilePort {
   getUserProfile(user: User): Promise<User>;
 }
 
-export const UserProfilePort = Symbol("UserProfilePort")
+export const UserProfilePort = Symbol('UserProfilePort');

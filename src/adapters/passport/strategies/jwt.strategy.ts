@@ -1,12 +1,14 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Inject, Injectable } from "@nestjs/common";
-import { UserPersistencePort } from "@ports/out/persistence/UserPersistencePort";
-import { JWT_SECRET } from "@adapters/constants";
+import { Inject, Injectable } from '@nestjs/common';
+import { UserPersistencePort } from '@ports/out/persistence/UserPersistencePort';
+import { JWT_SECRET } from '@adapters/constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(@Inject(UserPersistencePort) private userPersistence: UserPersistencePort) {
+  constructor(
+    @Inject(UserPersistencePort) private userPersistence: UserPersistencePort,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,

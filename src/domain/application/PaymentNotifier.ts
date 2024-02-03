@@ -1,6 +1,6 @@
-import { TransactionSendFailedNotifierPort } from '@ports/out/notifications/TransactionSendFailedNotifierPort';
-import { TransactionSentNotifierPort } from '@ports/out/notifications/TransactionSentNotifierPort';
-import { TransactionReceivedNotifierPort } from '@ports/out/notifications/TransactionReceivedNotifierPort';
+import { TransactionSendFailedNotifierPort } from '@ports/out/events/TransactionSendFailedNotifierPort';
+import { TransactionSentNotifierPort } from '@ports/out/events/TransactionSentNotifierPort';
+import { TransactionReceivedNotifierPort } from '@ports/out/events/TransactionReceivedNotifierPort';
 
 export interface PaymentNotifier {
   notifyPaymentSuccess(): Promise<void>;

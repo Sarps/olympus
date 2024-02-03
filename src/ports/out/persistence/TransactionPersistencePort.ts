@@ -5,4 +5,4 @@ export interface TransactionPersistencePort {
   getUserTransactions(userId: string): Promise<Transaction[]>;
 }
 
-export const TransactionPersistencePort = Symbol("TransactionPersistencePort")
+export const TransactionPersistencePort = Symbol('TransactionPersistencePort');

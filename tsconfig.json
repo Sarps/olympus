@@ -17,10 +17,11 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
     "paths": {
       "@adapters/*": ["src/adapters/*"],
       "@domain/*": ["src/domain/*"],
-      "@ports/*": ["src/ports/*"],
+      "@ports/*": ["src/ports/*"]
     }
   }
 }

@@ -1,29 +1,30 @@
-import { PrismaService } from "@adapters/prisma/prisma.service";
-import { Injectable } from "@nestjs/common";
-import { UserPersistencePort } from "@ports/out/persistence/UserPersistencePort";
-import { User } from "@domain/models/User";
+import { PrismaService } from '@adapters/prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
+import { UserPersistencePort } from '@ports/out/persistence/UserPersistencePort';
+import { User } from '@domain/models/User';
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class UsersRepository implements UserPersistencePort {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
-  async save(user: User): Promise<void> {
-    await this.prisma.user.create({
-      data: this.fromModel(user)
+  async save(user: User): Promise<User> {
+    const result = await this.prisma.user.create({
+      data: this.fromModel(user),
     });
+    return this.toModel(result)
   }
 
   async update(user: User): Promise<void> {
     await this.prisma.user.update({
       where: { id: user.id },
-      data: this.fromModel(user)
+      data: this.fromModel(user),
     });
   }
 
   async findById(id: string): Promise<User> {
     const result = await this.prisma.user.findFirstOrThrow({
-      where: { id }
+      where: { id },
     });
     return this.toModel(result);
   }
@@ -31,19 +32,17 @@ export class UsersRepository implements UserPersistencePort {
   async findByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
     const result = await this.prisma.user.findFirstOrThrow({
       where: {
-        OR: [
-          { username: usernameOrEmail }, { email: usernameOrEmail }
-        ]
-      }
+        OR: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+      },
     });
     return this.toModel(result);
   }
 
-  private toModel({ id, name, username, email, passwordHash }: any): User {
+  private toModel({ id, name, username, email, passwordHash }: Prisma.UserGetPayload<any>): User {
     return new User(id, name, username, email, passwordHash);
   }
 
-  private fromModel({ id, ...user }: User): any {
+  private fromModel({ id, ...user }: User): Prisma.UserCreateInput {
     return { ...user };
   }
 }
