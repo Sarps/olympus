@@ -1,3 +1,5 @@
 export interface VerifyUserPort {
-  verify(token: string): Promise<any>;
+  verifyByTokenOrOtp(token: string): Promise<boolean>;
 }
+
+export const VerifyUserPort = Symbol("VerifyUserPort")

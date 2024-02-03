@@ -15,6 +15,21 @@ export class UserVerificationsRepository implements UserVerificationPersistenceP
     });
   }
 
+  async findUserIdByOtpOrToken(otpOrToken: string): Promise<string> {
+    const result = await this.prisma.userVerification.findFirstOrThrow({
+      where: {
+        OR: [
+          { linkToken: otpOrToken, linkExpiresAt: { gt: new Date() } },
+          { otpCode: otpOrToken, otpExpiresAt: { gt: new Date() } }
+        ]
+      },
+      select: {
+        userId: true
+      }
+    });
+    return result.userId
+  }
+
   private fromModel({ id, ...payload }: UserVerification): Prisma.UserVerificationUncheckedCreateInput {
     return { ...payload };
   }

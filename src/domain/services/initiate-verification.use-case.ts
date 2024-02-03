@@ -6,7 +6,7 @@ import { Inject } from "@nestjs/common";
 import { UserVerification } from "@domain/models/UserVerification";
 import otp from 'otp-generator'
 
-export class InitiateUserVerificationUseCase implements InitiateUserVerificationPort {
+export class InitiateVerificationUseCase implements InitiateUserVerificationPort {
 
   constructor(
     @Inject(UserVerificationPersistencePort)

@@ -13,6 +13,8 @@ import { RegisterUseCase } from '@domain/services/register.use-case';
 import { PrismaModule } from '@adapters/prisma/prisma.module';
 import { PassportModule } from '@adapters/passport/passport.module';
 import { KafkaModule } from "@adapters/kafka/kafka.module";
+import { VerifyUserPort } from "@ports/in/users/verify-user.port";
+import { VerifyUserUseCase } from "@domain/services/verify-user.use-case";
 
 @Module({
   controllers: [TransactionsController, AuthController, UsersController],
@@ -21,6 +23,7 @@ import { KafkaModule } from "@adapters/kafka/kafka.module";
     { provide: TransactionsService, useClass: TransactionsServiceImpl },
     { provide: UserProfilePort, useClass: UserProfileUseCase },
     { provide: RegisterPort, useClass: RegisterUseCase },
+    { provide: VerifyUserPort, useClass: VerifyUserUseCase },
   ],
 })
 export class WebModule {}

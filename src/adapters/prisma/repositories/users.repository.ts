@@ -38,8 +38,8 @@ export class UsersRepository implements UserPersistencePort {
     return this.toModel(result);
   }
 
-  private toModel({ id, name, username, email, passwordHash }: Prisma.UserGetPayload<any>): User {
-    return new User(id, name, username, email, passwordHash);
+  private toModel({ id, name, username, email, passwordHash, lastVerified }: Prisma.UserGetPayload<any>): User {
+    return new User(id, name, username, email, passwordHash, lastVerified);
   }
 
   private fromModel({ id, ...user }: User): Prisma.UserCreateInput {

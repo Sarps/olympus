@@ -12,10 +12,10 @@ import { UserWalletBalancePort } from '@ports/in/wallets/user-wallet-balance.por
 import { Wallet } from '@domain/models/Wallet';
 import {
   ApiBearerAuth,
-  ApiForbiddenResponse,
+  ApiForbiddenResponse, ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+  ApiUnauthorizedResponse
+} from "@nestjs/swagger";
 import { RequestUser } from '@adapters/passport/user.decorator';
 import { User } from '@domain/models/User';
 import { JwtGuard } from '@adapters/passport/guards';
@@ -26,14 +26,15 @@ import { UserVerifiedGuard } from '@adapters/web/user-verified.guard';
 @Controller('users')
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 @ApiForbiddenResponse({ description: 'Forbidden' })
-@UseGuards(JwtGuard)
 @ApiBearerAuth()
-export class UsersController implements VerifyUserPort, UserWalletBalancePort {
+export class UsersController implements UserWalletBalancePort {
   constructor(
     @Inject(UserProfilePort) private readonly userProfile: UserProfilePort,
+    @Inject(VerifyUserPort) private readonly verifyUser: VerifyUserPort,
   ) {}
 
   @Get('profile')
+  @UseGuards(JwtGuard)
   async getUserProfile(
     @RequestUser() user: User,
   ): Promise<UserProfileResponseDto> {
@@ -42,13 +43,14 @@ export class UsersController implements VerifyUserPort, UserWalletBalancePort {
     return { name, email, username };
   }
 
-  @Get('verify/:key')
-  async verify(@Param('key', ParseUUIDPipe) key: string) {
-    // return this.usersService.verify(key);
+  @Get('verify/:code')
+  @ApiResponse({ status: 201, description: 'User has been verified successfully' })
+  async verify(@Param('code') tokenOrCode: string) {
+    await this.verifyUser.verifyByTokenOrOtp(tokenOrCode)
   }
 
   @Get('balance')
-  @UseGuards(UserVerifiedGuard)
+  @UseGuards(JwtGuard, UserVerifiedGuard)
   async viewUserWalletBalance(): Promise<Wallet> {
     throw Error('Not Implemented');
   }
