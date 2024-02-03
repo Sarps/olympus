@@ -1,5 +1,7 @@
-import { AuthLoginDto } from '@adapters/rest/dto/auth-login.dto';
+import { User } from "@domain/models/User";
 
 export interface LoginPort {
-  login(dto: AuthLoginDto);
+  login(usernameOrEmail: String, password: String): Promise<User>;
 }
+
+export const LoginPort = Symbol("LoginPort")

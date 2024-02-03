@@ -1,31 +1,38 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { UsersService } from '@domain/services/users.service';
-import { VerifyUserPort } from '@ports/in/users/VerifyUserPort';
-import { UserProfilePort } from '@ports/in/users/UserProfilePort';
-import { UserWalletBalancePort } from '@ports/in/wallets/UserWalletBalancePort';
-import { Wallet } from '@domain/models/Wallet';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Inject, Param, UseGuards } from "@nestjs/common";
+import { VerifyUserPort } from "@ports/in/users/VerifyUserPort";
+import { UserProfilePort } from "@ports/in/users/UserProfilePort";
+import { UserWalletBalancePort } from "@ports/in/wallets/UserWalletBalancePort";
+import { Wallet } from "@domain/models/Wallet";
+import { ApiForbiddenResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { AuthGuard } from "@nestjs/passport";
+import { RequestUser } from "@adapters/passport/user.decorator";
+import { User } from "@domain/models/User";
 
-@ApiTags('Users')
-@Controller('users')
-@ApiResponse({ status: 401, description: 'Unauthorized' })
+@ApiTags("Users")
+@Controller("users")
+@ApiUnauthorizedResponse({ description: "Unauthorized" })
+@ApiForbiddenResponse({ description: "Forbidden" })
 export class UsersController
-  implements VerifyUserPort, UserProfilePort, UserWalletBalancePort
-{
-  constructor(private readonly usersService: UsersService) {}
-
-  @Get('profile')
-  async getUserProfile() {
-    return this.usersService.findById();
+  implements VerifyUserPort, UserWalletBalancePort {
+  constructor(
+    @Inject(UserProfilePort) private readonly userProfile: UserProfilePort
+  ) {
   }
 
-  @Get('verify/:key') // TODO: Id pattern validation
-  async verify(@Param('key') key: string) {
-    return this.usersService.verify(key);
+  @Get("profile")
+  @UseGuards(AuthGuard("jwt"))
+  async getUserProfile(@RequestUser() user: User) {
+    return this.userProfile.getUserProfile(user);
   }
 
-  @Get('balance')
+  @Get("verify/:key") // TODO: Id pattern validation
+  async verify(@Param("key") key: string) {
+    // return this.usersService.verify(key);
+  }
+
+  @Get("balance")
+  @UseGuards(AuthGuard("jwt"))
   async viewUserWalletBalance(): Promise<Wallet> {
-    throw Error('Not Implemented');
+    throw Error("Not Implemented");
   }
 }
