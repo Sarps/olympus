@@ -1,3 +1,3 @@
 export interface UserVerifiedEventPort {
-  notifyUserVerification(): Promise<void>;
+  fire(): Promise<void>;
 }

@@ -1,6 +1,6 @@
 import { PrismaService } from '@adapters/prisma/prisma.service';
 import { Transaction } from '@domain/models/transaction';
-import { TransactionPersistencePort } from '@ports/out/persistence/TransactionPersistencePort';
+import { TransactionPersistencePort } from '@ports/out/persistence/transaction.persistence.port';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

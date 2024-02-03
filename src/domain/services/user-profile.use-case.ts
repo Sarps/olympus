@@ -1,4 +1,4 @@
-import { UserProfilePort } from '@ports/in/users/UserProfilePort';
+import { UserProfilePort } from '@ports/in/users/user-profile.port';
 import { User } from '@domain/models/User';
 
 export class UserProfileUseCase implements UserProfilePort {

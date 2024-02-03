@@ -1,12 +1,12 @@
-import { InitiateUserVerificationPort } from "@ports/in/users/InitiateUserVerificationPort";
+import { InitiateUserVerificationPort } from "@ports/in/users/initiate-user-verification.port";
 import secureRandom from "secure-random-string";
 import { VERIFY_URL } from "@adapters/constants";
-import { UserVerificationPersistencePort } from "@ports/out/persistence/UserVerificationPersistencePort";
+import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
 import { Inject } from "@nestjs/common";
 import { UserVerification } from "@domain/models/UserVerification";
 import otp from 'otp-generator'
 
-export class InitiateUserVerification implements InitiateUserVerificationPort {
+export class InitiateUserVerificationUseCase implements InitiateUserVerificationPort {
 
   constructor(
     @Inject(UserVerificationPersistencePort)

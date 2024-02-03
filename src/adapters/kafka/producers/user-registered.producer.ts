@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UserRegisteredEventPort } from "@ports/out/events/UserRegisteredEventPort";
+import { UserRegisteredEventPort } from "@ports/out/events/user-registered.event.port";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EVENTS } from "@adapters/constants";
 import { UserEvent } from "@domain/models/events/UserEvent";

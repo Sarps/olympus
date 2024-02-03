@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { TransactionPersistencePort } from '@ports/out/persistence/TransactionPersistencePort';
+import { TransactionPersistencePort } from '@ports/out/persistence/transaction.persistence.port';
 import { TransactionsRepository } from '@adapters/prisma/transactions.repository';
-import { UserPersistencePort } from '@ports/out/persistence/UserPersistencePort';
+import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { UsersRepository } from '@adapters/prisma/users.repository';
-import { UserVerificationPersistencePort } from "@ports/out/persistence/UserVerificationPersistencePort";
+import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
 import { UserVerificationsRepository } from "@adapters/prisma/user-verifications.repository";
 
 @Module({

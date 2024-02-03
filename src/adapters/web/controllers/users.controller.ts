@@ -6,9 +6,9 @@ import {
   ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
-import { VerifyUserPort } from '@ports/in/users/VerifyUserPort';
-import { UserProfilePort } from '@ports/in/users/UserProfilePort';
-import { UserWalletBalancePort } from '@ports/in/wallets/UserWalletBalancePort';
+import { VerifyUserPort } from '@ports/in/users/verify-user.port';
+import { UserProfilePort } from '@ports/in/users/user-profile.port';
+import { UserWalletBalancePort } from '@ports/in/wallets/user-wallet-balance.port';
 import { Wallet } from '@domain/models/Wallet';
 import {
   ApiBearerAuth,
@@ -20,7 +20,7 @@ import { RequestUser } from '@adapters/passport/user.decorator';
 import { User } from '@domain/models/User';
 import { JwtGuard } from '@adapters/passport/guards';
 import { UserProfileResponseDto } from '@adapters/web/dto/user-profile.dto';
-import { UserVerifiedGuard } from '@adapters/web/user-verified-guard.service';
+import { UserVerifiedGuard } from '@adapters/web/user-verified.guard';
 
 @ApiTags('Users')
 @Controller('users')

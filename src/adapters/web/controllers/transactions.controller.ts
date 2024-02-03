@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { TransactionsService } from '@domain/services/transactions.service';
-import { InitiateTransactionPort } from '@ports/in/transactions/InitiateTransactionPort';
-import { TransactionHistoryPort } from '@ports/in/transactions/TransactionHistoryPort';
+import { InitiateTransactionPort } from '@ports/in/transactions/initiate-transaction.port';
+import { TransactionHistoryPort } from '@ports/in/transactions/transaction-history.port';
 import { CreateTransactionDto } from '@domain/models/dto/create-transaction.dto';
 import {
   ApiBearerAuth,
@@ -10,7 +10,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtGuard } from '@adapters/passport/guards';
-import { UserVerifiedGuard } from '@adapters/web/user-verified-guard.service';
+import { UserVerifiedGuard } from '@adapters/web/user-verified.guard';
 
 @ApiTags('Transactions')
 @Controller('transactions')

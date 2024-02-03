@@ -1,7 +1,7 @@
 import { PrismaService } from "@adapters/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
-import { UserVerificationPersistencePort } from "@ports/out/persistence/UserVerificationPersistencePort";
+import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
 import { UserVerification } from "@domain/models/UserVerification";
 
 @Injectable()

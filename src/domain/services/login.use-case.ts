@@ -1,6 +1,6 @@
-import { LoginPort } from '@ports/in/auth/LoginPort';
+import { LoginPort } from '@ports/in/auth/login.port';
 import { User } from '@domain/models/User';
-import { UserPersistencePort } from '@ports/out/persistence/UserPersistencePort';
+import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 

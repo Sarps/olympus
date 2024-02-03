@@ -1,10 +1,9 @@
-import { RegisterPort, RegisterPortOptions } from '@ports/in/auth/RegisterPort';
+import { RegisterPort, RegisterPortOptions } from '@ports/in/auth/register.port';
 import { ConflictException, Inject } from "@nestjs/common";
-import { UserPersistencePort } from '@ports/out/persistence/UserPersistencePort';
+import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { User } from '@domain/models/User';
 import * as bcrypt from 'bcrypt';
-import { UserVerifiedEventPort } from "@ports/out/events/UserVerifiedEventPort";
-import { UserRegisteredEventPort } from "@ports/out/events/UserRegisteredEventPort";
+import { UserRegisteredEventPort } from "@ports/out/events/user-registered.event.port";
 
 export class RegisterUseCase implements RegisterPort {
   constructor(

@@ -3,8 +3,8 @@ import { PrismaModule } from '@adapters/prisma/prisma.module';
 import { PassportModule as ExternalPassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@adapters/passport/strategies/jwt.strategy';
 import { LocalStrategy } from '@adapters/passport/strategies/local.strategy';
-import { LoginPort } from '@ports/in/auth/LoginPort';
-import { LoginUseCase } from '@domain/services/LoginUseCase';
+import { LoginPort } from '@ports/in/auth/login.port';
+import { LoginUseCase } from '@domain/services/login.use-case';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_EXPIRES_IN, JWT_SECRET } from '@adapters/constants';
 

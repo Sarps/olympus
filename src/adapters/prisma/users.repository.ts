@@ -1,6 +1,6 @@
 import { PrismaService } from '@adapters/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { UserPersistencePort } from '@ports/out/persistence/UserPersistencePort';
+import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { User } from '@domain/models/User';
 import { Prisma } from "@prisma/client";
 

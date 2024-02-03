@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { EVENTS } from "@adapters/constants";
 import { UserEvent } from "@domain/models/events/UserEvent";
-import { InitiateUserVerificationPort } from "@ports/in/users/InitiateUserVerificationPort";
+import { InitiateUserVerificationPort } from "@ports/in/users/initiate-user-verification.port";
 
 @Injectable()
 export class VerifyUserConsumer {
@@ -14,7 +14,7 @@ export class VerifyUserConsumer {
   }
 
   @OnEvent(EVENTS.USER_REGISTERED, { async: true })
-  handle(payload: UserEvent) {
-    this.initiateUserVerification.initiateVerification(payload.id, payload.email)
+  async handle(payload: UserEvent) {
+    await this.initiateUserVerification.initiateVerification(payload.id, payload.email)
   }
 }

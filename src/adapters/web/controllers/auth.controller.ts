@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
-import { RegisterPort } from '@ports/in/auth/RegisterPort';
+import { RegisterPort } from '@ports/in/auth/register.port';
 import { AuthLoginDto } from '@adapters/web/dto/auth-login.dto';
 import { AuthRegisterDto } from '@adapters/web/dto/auth-register.dto';
 import {

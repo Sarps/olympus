@@ -6,10 +6,10 @@ import {
 } from '@domain/services/transactions.service';
 import { AuthController } from '@adapters/web/controllers/auth.controller';
 import { UsersController } from '@adapters/web/controllers/users.controller';
-import { UserProfilePort } from '@ports/in/users/UserProfilePort';
-import { UserProfileUseCase } from '@domain/services/UserProfileUseCase';
-import { RegisterPort } from '@ports/in/auth/RegisterPort';
-import { RegisterUseCase } from '@domain/services/RegisterUseCase';
+import { UserProfilePort } from '@ports/in/users/user-profile.port';
+import { UserProfileUseCase } from '@domain/services/user-profile.use-case';
+import { RegisterPort } from '@ports/in/auth/register.port';
+import { RegisterUseCase } from '@domain/services/register.use-case';
 import { PrismaModule } from '@adapters/prisma/prisma.module';
 import { PassportModule } from '@adapters/passport/passport.module';
 import { KafkaModule } from "@adapters/kafka/kafka.module";
