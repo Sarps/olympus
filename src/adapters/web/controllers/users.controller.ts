@@ -7,11 +7,13 @@ import { ApiForbiddenResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/
 import { AuthGuard } from "@nestjs/passport";
 import { RequestUser } from "@adapters/passport/user.decorator";
 import { User } from "@domain/models/User";
+import { JwtGuard } from "@adapters/passport/guards";
 
 @ApiTags("Users")
 @Controller("users")
 @ApiUnauthorizedResponse({ description: "Unauthorized" })
 @ApiForbiddenResponse({ description: "Forbidden" })
+@UseGuards(JwtGuard)
 export class UsersController
   implements VerifyUserPort, UserWalletBalancePort {
   constructor(
@@ -20,7 +22,6 @@ export class UsersController
   }
 
   @Get("profile")
-  @UseGuards(AuthGuard("jwt"))
   async getUserProfile(@RequestUser() user: User) {
     return this.userProfile.getUserProfile(user);
   }

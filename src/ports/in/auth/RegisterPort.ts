@@ -1,5 +1,13 @@
-import { AuthRegisterDto } from '@domain/models/dto/auth-register.dto';
+
+export type RegisterPortOptions = {
+  name: string
+  email: string
+  username: string
+  password: string
+}
 
 export interface RegisterPort {
-  register(dto: AuthRegisterDto);
+  register(options: RegisterPortOptions): Promise<void>;
 }
+
+export const RegisterPort = Symbol("RegisterPort")

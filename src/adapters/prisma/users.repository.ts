@@ -30,16 +30,20 @@ export class UsersRepository implements UserPersistencePort {
 
   async findByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
     const result = await this.prisma.user.findFirstOrThrow({
-      where: { username: usernameOrEmail, email: usernameOrEmail }
+      where: {
+        OR: [
+          { username: usernameOrEmail }, { email: usernameOrEmail }
+        ]
+      }
     });
     return this.toModel(result);
   }
 
-  private toModel(transaction: any): User {
-    return new User()
+  private toModel({ id, name, username, email, password, passwordSalt }: any): User {
+    return new User(id, name, username, email, password, passwordSalt);
   }
 
-  private fromModel(transaction: User): any {
-
+  private fromModel({ id, passwordHash, ...user }: User): any {
+    return { ...user, password: passwordHash };
   }
 }
