@@ -8,6 +8,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Project Olympus')
     .setDescription('A Fintech Backend System Implementation')
     .setVersion('1.0')

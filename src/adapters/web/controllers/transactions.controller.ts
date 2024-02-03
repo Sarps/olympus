@@ -3,15 +3,17 @@ import { TransactionsService } from '@domain/services/transactions.service';
 import { InitiateTransactionPort } from '@ports/in/transactions/InitiateTransactionPort';
 import { TransactionHistoryPort } from '@ports/in/transactions/TransactionHistoryPort';
 import { CreateTransactionDto } from '@domain/models/dto/create-transaction.dto';
-import { ApiForbiddenResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiForbiddenResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { JwtGuard } from "@adapters/passport/guards";
+import { UserVerifiedGuard } from "@adapters/web/user-verified-guard.service";
 
 @ApiTags('Transactions')
 @Controller('transactions')
 @ApiUnauthorizedResponse({description: 'Unauthorized'})
 @ApiForbiddenResponse({description: 'Forbidden'})
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, UserVerifiedGuard)
+@ApiBearerAuth()
 export class TransactionsController
   implements InitiateTransactionPort, TransactionHistoryPort
 {

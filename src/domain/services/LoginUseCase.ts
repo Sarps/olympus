@@ -2,8 +2,7 @@ import { LoginPort } from "@ports/in/auth/LoginPort";
 import { User } from "@domain/models/User";
 import { UserPersistencePort } from "@ports/out/persistence/UserPersistencePort";
 import { Inject } from "@nestjs/common";
-import { verify } from "passport-local-authenticate";
-import { promisify } from "util";
+import * as bcrypt from "bcrypt";
 
 export class LoginUseCase implements LoginPort {
 
@@ -23,7 +22,7 @@ export class LoginUseCase implements LoginPort {
   }
 
   private async isValidPassword(password: string, user: User): Promise<boolean> {
-    return promisify(verify)(password, { salt: user.passwordSalt, hash: user.passwordHash });
+    return bcrypt.compare(password, user.passwordHash);
   }
 
 }

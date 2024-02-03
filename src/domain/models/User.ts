@@ -5,7 +5,11 @@ export class User {
     public username: string,
     public email: string,
     public passwordHash: string,
-    public passwordSalt: string
+    public lastVerified?: Date
   ) {
+  }
+
+  get isVerified() {
+    return !!this.lastVerified
   }
 }

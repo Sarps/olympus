@@ -39,11 +39,11 @@ export class UsersRepository implements UserPersistencePort {
     return this.toModel(result);
   }
 
-  private toModel({ id, name, username, email, password, passwordSalt }: any): User {
-    return new User(id, name, username, email, password, passwordSalt);
+  private toModel({ id, name, username, email, passwordHash }: any): User {
+    return new User(id, name, username, email, passwordHash);
   }
 
-  private fromModel({ id, passwordHash, ...user }: User): any {
-    return { ...user, password: passwordHash };
+  private fromModel({ id, ...user }: User): any {
+    return { ...user };
   }
 }
