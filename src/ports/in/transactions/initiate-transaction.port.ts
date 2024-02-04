@@ -4,7 +4,7 @@ export type InitiateTransaction = {
   senderId: string;
   narration: string;
   recipientId: string;
-  recipientNarration: string;
+  recipientNarration?: string;
 };
 
 export interface InitiateTransactionPort {

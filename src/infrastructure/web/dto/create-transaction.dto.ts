@@ -38,5 +38,5 @@ export class CreateTransactionDto {
     example: 'Test transaction',
   })
   @IsOptional()
-  recipientNarration: string;
+  recipientNarration?: string;
 }

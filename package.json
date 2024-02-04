@@ -43,7 +43,7 @@
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
-    "@nestjs/testing": "^10.0.0",
+    "@nestjs/testing": "^10.3.1",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
@@ -56,6 +56,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "jest": "^29.5.0",
+    "moq.ts": "^10.0.8",
     "prettier": "^3.0.0",
     "prisma": "^4.16.2",
     "source-map-support": "^0.5.21",
@@ -72,7 +73,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -81,6 +82,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@(infrastructure|domain|ports)/(.*)$": "<rootDir>/src/$1/$2"
+    }
   }
 }

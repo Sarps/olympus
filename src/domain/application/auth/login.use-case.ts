@@ -2,7 +2,7 @@ import { LoginPort } from '@ports/in/auth/login.port';
 import { UserEntity } from '@domain/models/entities/user.entity';
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { Inject } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 
 export class LoginUseCase implements LoginPort {
   constructor(
@@ -15,7 +15,7 @@ export class LoginUseCase implements LoginPort {
         await this.userPersistence.findByUsernameOrEmail(usernameOrEmail);
       if (await this.isValidPassword(password, user)) return user;
     } catch (e) {
-      console.log('Failed retrieving user', e);
+      // console.log('Failed retrieving user', e);
     }
     return null;
   }

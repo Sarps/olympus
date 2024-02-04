@@ -5,8 +5,9 @@ import {
 import { ConflictException, Inject } from '@nestjs/common';
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { UserEntity } from '@domain/models/entities/user.entity';
-import * as bcrypt from 'bcrypt';
 import { UserRegisteredEventPort } from '@ports/out/events/user-registered.event.port';
+
+const bcrypt = require('bcrypt');
 
 export class RegisterUseCase implements RegisterPort {
   constructor(
@@ -26,8 +27,8 @@ export class RegisterUseCase implements RegisterPort {
     );
     try {
       user.id = await this.userPersistence.save(user);
-      delete user.passwordHash;
-      await this.userRegisteredEvent.fire(user);
+      const { passwordHash: _, ...payload } = user;
+      await this.userRegisteredEvent.fire(payload);
     } catch (e) {
       throw new ConflictException('The username or email is already in use');
     }

@@ -1,4 +1,7 @@
-import { OTP_EXPIRY_MINUTES, TOKEN_EXPIRY_MINUTES } from '@infrastructure/constants';
+import {
+  OTP_EXPIRY_MINUTES,
+  TOKEN_EXPIRY_MINUTES,
+} from '@infrastructure/constants';
 
 export class UserVerificationEntity {
   constructor(
