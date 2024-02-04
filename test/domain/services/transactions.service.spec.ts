@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InitiateTransactionUseCase } from '@domain/services/initiate-transaction.use-case';
+import { InitiateTransactionUseCase } from '@domain/application/initiate-transaction.use-case';
 
 describe('TransactionsService', () => {
   let service: InitiateTransactionUseCase;

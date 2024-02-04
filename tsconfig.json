@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "paths": {
-      "@adapters/*": ["src/adapters/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
       "@domain/*": ["src/domain/*"],
       "@ports/*": ["src/ports/*"]
     }
