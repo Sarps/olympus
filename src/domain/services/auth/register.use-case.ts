@@ -1,9 +1,12 @@
-import { RegisterPort, RegisterPortOptions } from '@ports/in/auth/register.port';
-import { ConflictException, Inject } from "@nestjs/common";
+import {
+  RegisterPort,
+  RegisterPortOptions,
+} from '@ports/in/auth/register.port';
+import { ConflictException, Inject } from '@nestjs/common';
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { UserEntity } from '@domain/models/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UserRegisteredEventPort } from "@ports/out/events/user-registered.event.port";
+import { UserRegisteredEventPort } from '@ports/out/events/user-registered.event.port';
 
 export class RegisterUseCase implements RegisterPort {
   constructor(
@@ -14,13 +17,19 @@ export class RegisterUseCase implements RegisterPort {
   ) {}
 
   async register({ name, username, email, password }: RegisterPortOptions) {
+    const user = new UserEntity(
+      null,
+      name,
+      username,
+      email,
+      await this.hash(password),
+    );
     try {
-      const { passwordHash: _, ...user } = await this.userPersistence.save(
-        new UserEntity(null, name, username, email, await this.hash(password)),
-      );
-      await this.userRegisteredEvent.fire(user)
+      user.id = await this.userPersistence.save(user);
+      delete user.passwordHash;
+      await this.userRegisteredEvent.fire(user);
     } catch (e) {
-      throw new ConflictException("The username or email is already in use")
+      throw new ConflictException('The username or email is already in use');
     }
   }
 

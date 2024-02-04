@@ -1,17 +1,18 @@
-import { PrismaService } from "@adapters/prisma/prisma.service";
-import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
-import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
-import { UserVerificationEntity } from "@domain/models/entities/user-verification.entity";
+import { PrismaService } from '@adapters/prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { UserVerificationPersistencePort } from '@ports/out/persistence/user-verification.persistence.port';
+import { UserVerificationEntity } from '@domain/models/entities/user-verification.entity';
 
 @Injectable()
-export class UserVerificationsRepository implements UserVerificationPersistencePort {
-  constructor(private prisma: PrismaService) {
-  }
+export class UserVerificationsRepository
+  implements UserVerificationPersistencePort
+{
+  constructor(private prisma: PrismaService) {}
 
   async save(payload: UserVerificationEntity): Promise<void> {
     await this.prisma.userVerification.create({
-      data: this.fromModel(payload)
+      data: this.fromModel(payload),
     });
   }
 
@@ -20,17 +21,20 @@ export class UserVerificationsRepository implements UserVerificationPersistenceP
       where: {
         OR: [
           { linkToken: otpOrToken, linkExpiresAt: { gt: new Date() } },
-          { otpCode: otpOrToken, otpExpiresAt: { gt: new Date() } }
-        ]
+          { otpCode: otpOrToken, otpExpiresAt: { gt: new Date() } },
+        ],
       },
       select: {
-        userId: true
-      }
+        userId: true,
+      },
     });
-    return result.userId
+    return result.userId;
   }
 
-  private fromModel({ id, ...payload }: UserVerificationEntity): Prisma.UserVerificationUncheckedCreateInput {
+  private fromModel({
+    id: _,
+    ...payload
+  }: UserVerificationEntity): Prisma.UserVerificationUncheckedCreateInput {
     return { ...payload };
   }
 }

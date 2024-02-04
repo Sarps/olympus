@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TransactionsService } from '@domain/services/transactions.service';
+import { InitiateTransactionUseCase } from '@domain/services/initiate-transaction.use-case';
 
 describe('TransactionsService', () => {
-  let service: TransactionsService;
+  let service: InitiateTransactionUseCase;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [TransactionsService],
     }).compile();
 
-    service = module.get<TransactionsService>(TransactionsService);
+    service = module.get<InitiateTransactionUseCase>(TransactionsService);
   });
 
   it('should be defined', () => {

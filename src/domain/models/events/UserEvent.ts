@@ -1,3 +1,3 @@
-import { UserEntity } from "@domain/models/entities/user.entity";
+import { UserEntity } from '@domain/models/entities/user.entity';
 
-export type UserEvent = Omit<UserEntity, "passwordHash" | "isVerified">
+export type UserEvent = Omit<UserEntity, 'passwordHash' | 'isVerified'>;

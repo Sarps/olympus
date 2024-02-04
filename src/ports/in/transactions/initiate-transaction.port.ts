@@ -1,8 +1,14 @@
-import { CreateTransactionDto } from '@domain/models/dto/create-transaction.dto';
-import { TransactionEntity } from "@domain/models/entities/transaction.entity";
+export type InitiateTransaction = {
+  idempotencyKey: string;
+  amount: number;
+  senderId: string;
+  narration: string;
+  recipientId: string;
+  recipientNarration: string;
+};
 
 export interface InitiateTransactionPort {
-  initiateTransaction(createTransactionDto: CreateTransactionDto): Promise<TransactionEntity>;
+  initiateTransaction(payload: InitiateTransaction): Promise<void>;
 }
 
-export const InitiateTransactionPort = Symbol("InitiateTransactionPort")
+export const InitiateTransactionPort = Symbol('InitiateTransactionPort');

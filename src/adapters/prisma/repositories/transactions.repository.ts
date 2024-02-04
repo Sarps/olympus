@@ -1,37 +1,105 @@
-import { PrismaService } from "@adapters/prisma/prisma.service";
-import { TransactionEntity } from "@domain/models/entities/transaction.entity";
-import { TransactionPersistencePort } from "@ports/out/persistence/transaction.persistence.port";
-import { Injectable } from "@nestjs/common";
+import { PrismaService } from '@adapters/prisma/prisma.service';
+import {
+  TransactionEntity,
+  TransactionFulfilment,
+} from '@domain/models/entities/transaction.entity';
+import { TransactionPersistencePort } from '@ports/out/persistence/transaction.persistence.port';
+import { Injectable } from '@nestjs/common';
+import {
+  Currency as PrismaCurrency,
+  Prisma,
+  TransactionRole as PrismaRole,
+} from '@prisma/client';
+import { AmountEntity } from '@domain/models/entities/amount.entity';
+import { Currency } from '@domain/models/enums/currency';
+import { TransactionRole } from '@domain/models/enums/transaction-role';
+
+const walletInclude = {
+  include: { wallet: { include: { user: { select: { id: true } } } } },
+};
+
+type TransactionResult = Prisma.TransactionGetPayload<{
+  include: { wallets: typeof walletInclude };
+}>;
 
 @Injectable()
 export class TransactionsRepository implements TransactionPersistencePort {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
-  async save(transactions: TransactionEntity[]): Promise<void> {
-    await this.prisma.transaction.createMany({
-      data: transactions.map((t) => this.fromModel(t))
+  async save(transaction: TransactionEntity): Promise<string> {
+    const result = await this.prisma.transaction.create({
+      data: this.fromModel(transaction),
+      select: { id: true },
     });
+    return result.id;
   }
 
-  async getUserTransactions(userId: string, page: number, perPage: number): Promise<TransactionEntity[]> {
+  async getUserTransactions(
+    userId: string,
+    page: number,
+    perPage: number,
+  ): Promise<TransactionEntity[]> {
     const skip = (page - 1) * perPage;
 
     const transactions = await this.prisma.transaction.findMany({
       skip,
       take: perPage,
-      orderBy: {createdAt: 'desc'},
+      orderBy: { createdAt: 'desc' },
       where: { wallets: { some: { wallet: { userId } } } },
-      include: { wallets: { include: { wallet: { include: { user: true } } } } }
+      include: { wallets: walletInclude },
     });
-    console.log(transactions)
-    return transactions.map((t) => this.toModel(t));
+    return transactions.map((t) => this.toModel(t, userId));
   }
 
-  private toModel(transaction: any): TransactionEntity {
-    return new TransactionEntity();
+  private toModel(
+    result: TransactionResult,
+    userId: string,
+  ): TransactionEntity {
+    return new TransactionEntity(
+      result.id,
+      userId,
+      result.idempotencyKey,
+      new AmountEntity(Currency[result.currency], result.amount),
+      result.wallets.map(this.toFulfilmentModel),
+    );
   }
 
-  private fromModel(transaction: TransactionEntity): any {
+  private fromModel({
+    idempotencyKey,
+    amount,
+    fulfilment,
+  }: TransactionEntity): Prisma.TransactionUncheckedCreateInput {
+    return {
+      idempotencyKey,
+      amount: amount.amount,
+      currency: PrismaCurrency[amount.currency],
+      wallets: { create: fulfilment.map(this.fromFulfilmentModel) },
+    };
+  }
+
+  private toFulfilmentModel(
+    wallet: Prisma.WalletTransactionGetPayload<typeof walletInclude>,
+  ): TransactionFulfilment {
+    return {
+      amount: new AmountEntity(Currency[wallet.currency], wallet.amount),
+      narration: wallet.narration,
+      role: TransactionRole[wallet.role],
+      userId: wallet.wallet.user.id,
+    };
+  }
+
+  private fromFulfilmentModel({
+    userId,
+    role,
+    narration,
+    amount,
+  }: TransactionFulfilment): Prisma.WalletTransactionCreateWithoutTransactionInput {
+    return {
+      amount: amount.amount,
+      currency: PrismaCurrency[amount.currency],
+      narration,
+      role: PrismaRole[role],
+      wallet: { connect: { userId } },
+    };
   }
 }

@@ -21,7 +21,7 @@ enum TransactionStatus {
 
 enum TransactionRole {
   SENDER
-  RECEIPIENT
+  RECIPIENT
   FEE
 }
 
@@ -58,7 +58,7 @@ model Transaction {
   idempotencyKey String              @unique() @map("idempotency_key")
   amount         Float
   currency       Currency
-  status         TransactionStatus
+  status         TransactionStatus   @default(INITIATED)
   statusReason   String?             @map("status_reason")
   createdAt      DateTime            @default(now()) @map("created_at")
   updatedAt      DateTime            @updatedAt @map("updated_at")
@@ -83,17 +83,15 @@ model UserVerification {
 }
 
 model WalletTransaction {
-  walletId      String            @map("wallet_id")
-  transactionId String            @map("transaction_id")
+  walletId      String          @map("wallet_id")
+  transactionId String          @map("transaction_id")
   role          TransactionRole
   amount        Float
   currency      Currency
   narration     String
-  status        TransactionStatus
-  statusReason  String?           @map("status_reason")
-  transaction   Transaction       @relation(fields: [transactionId], references: [id])
-  wallet        Wallet            @relation(fields: [walletId], references: [id])
-  createdAt     DateTime          @default(now())
+  transaction   Transaction     @relation(fields: [transactionId], references: [id])
+  wallet        Wallet          @relation(fields: [walletId], references: [id])
+  createdAt     DateTime        @default(now())
 
   @@id([walletId, transactionId, role])
   @@map("wallet_transactions")

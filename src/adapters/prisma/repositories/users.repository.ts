@@ -2,17 +2,18 @@ import { PrismaService } from '@adapters/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { UserEntity } from '@domain/models/entities/user.entity';
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersRepository implements UserPersistencePort {
   constructor(private prisma: PrismaService) {}
 
-  async save(user: UserEntity): Promise<UserEntity> {
+  async save(user: UserEntity): Promise<string> {
     const result = await this.prisma.user.create({
       data: this.fromModel(user),
+      select: { id: true },
     });
-    return this.toModel(result)
+    return result.id;
   }
 
   async update(user: UserEntity): Promise<void> {
@@ -38,11 +39,28 @@ export class UsersRepository implements UserPersistencePort {
     return this.toModel(result);
   }
 
-  private toModel({ id, name, username, email, passwordHash, lastVerified }: Prisma.UserGetPayload<any>): UserEntity {
-    return new UserEntity(id, name, username, email, passwordHash, lastVerified);
+  private toModel({
+    id,
+    name,
+    username,
+    email,
+    passwordHash,
+    lastVerified,
+  }: Prisma.UserGetPayload<any>): UserEntity {
+    return new UserEntity(
+      id,
+      name,
+      username,
+      email,
+      passwordHash,
+      lastVerified,
+    );
   }
 
-  private fromModel({ id, ...user }: UserEntity): Prisma.UserUncheckedCreateInput {
+  private fromModel({
+    id: _,
+    ...user
+  }: UserEntity): Prisma.UserUncheckedCreateInput {
     return { ...user };
   }
 }

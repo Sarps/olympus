@@ -1,4 +1,4 @@
-import { OTP_EXPIRY_MINUTES, TOKEN_EXPIRY_MINUTES } from "@adapters/constants";
+import { OTP_EXPIRY_MINUTES, TOKEN_EXPIRY_MINUTES } from '@adapters/constants';
 
 export class UserVerificationEntity {
   constructor(
@@ -8,9 +8,8 @@ export class UserVerificationEntity {
     public linkToken: string,
     public linkExpiresAt: Date,
     public attempts: number,
-    public userId: string
-  ) {
-  }
+    public userId: string,
+  ) {}
 
   static newInstance(otpCode: string, linkToken: string, userId: string) {
     return new UserVerificationEntity(
@@ -20,7 +19,7 @@ export class UserVerificationEntity {
       linkToken,
       this.getExpiry(TOKEN_EXPIRY_MINUTES),
       0,
-      userId
+      userId,
     );
   }
 

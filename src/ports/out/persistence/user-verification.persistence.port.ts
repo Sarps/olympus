@@ -1,4 +1,4 @@
-import { UserVerificationEntity } from "@domain/models/entities/user-verification.entity";
+import { UserVerificationEntity } from '@domain/models/entities/user-verification.entity';
 
 export interface UserVerificationPersistencePort {
   save(payload: UserVerificationEntity): Promise<void>;
@@ -6,4 +6,6 @@ export interface UserVerificationPersistencePort {
   findUserIdByOtpOrToken(otpOrToken: string): Promise<string>;
 }
 
-export const UserVerificationPersistencePort = Symbol("UserVerificationPersistencePort");
+export const UserVerificationPersistencePort = Symbol(
+  'UserVerificationPersistencePort',
+);

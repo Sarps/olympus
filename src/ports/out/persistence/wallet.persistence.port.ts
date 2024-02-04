@@ -1,4 +1,4 @@
-import { WalletEntity } from "@domain/models/entities/wallet.entity";
+import { WalletEntity } from '@domain/models/entities/wallet.entity';
 
 export interface WalletPersistencePort {
   save(payload: WalletEntity): Promise<void>;
@@ -6,4 +6,4 @@ export interface WalletPersistencePort {
   findByUserId(userId: string): Promise<WalletEntity>;
 }
 
-export const WalletPersistencePort = Symbol("WalletPersistencePort");
+export const WalletPersistencePort = Symbol('WalletPersistencePort');

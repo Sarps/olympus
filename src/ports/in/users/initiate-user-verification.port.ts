@@ -1,5 +1,7 @@
 export interface InitiateUserVerificationPort {
-  initiateVerification(userId: string, email: string): Promise<void>
+  initiateVerification(userId: string, email: string): Promise<void>;
 }
 
-export const InitiateUserVerificationPort = Symbol("InitiateUserVerificationPort")
+export const InitiateUserVerificationPort = Symbol(
+  'InitiateUserVerificationPort',
+);
