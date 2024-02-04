@@ -1,8 +1,8 @@
 import { UserProfilePort } from '@ports/in/users/user-profile.port';
-import { User } from '@domain/models/User';
+import { UserEntity } from '@domain/models/entities/user.entity';
 
 export class UserProfileUseCase implements UserProfilePort {
-  async getUserProfile(user: User): Promise<User> {
+  async getUserProfile(user: UserEntity): Promise<UserEntity> {
     return user;
   }
 }

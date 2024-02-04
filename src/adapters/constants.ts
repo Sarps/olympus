@@ -6,5 +6,6 @@ export const OTP_EXPIRY_MINUTES = 15
 export const TOKEN_EXPIRY_MINUTES = 24 * 60
 
 export const EVENTS = {
-  USER_REGISTERED: 'user.registered'
+  USER_REGISTERED: 'user.registered',
+  USER_VERIFIED: 'user.verified',
 }

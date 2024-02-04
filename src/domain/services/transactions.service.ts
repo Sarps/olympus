@@ -1,22 +1,22 @@
-import { Transaction } from '@domain/models/transaction';
+import { TransactionEntity } from '@domain/models/entities/transaction.entity';
 import { TransactionProcessor } from '@domain/application/TransactionProcessor';
 
 export interface TransactionsService {
-  findByUserId(): Promise<Transaction[]>;
+  findByUserId(): Promise<TransactionEntity[]>;
 
-  createTransaction(transaction: Transaction): Promise<string>;
+  createTransaction(transaction: TransactionEntity): Promise<string>;
 
-  findByIdempotencyKey(idempotencyKey: string): Promise<Transaction>;
+  findByIdempotencyKey(idempotencyKey: string): Promise<TransactionEntity>;
 }
 
 export class TransactionsServiceImpl implements TransactionsService {
   constructor(private transactionProcessor: TransactionProcessor) {}
 
-  async findByUserId(): Promise<Transaction[]> {
+  async findByUserId(): Promise<TransactionEntity[]> {
     return [];
   }
 
-  async createTransaction(transaction: Transaction): Promise<string> {
+  async createTransaction(transaction: TransactionEntity): Promise<string> {
     // TODO: Save transaction
     try {
       await this.transactionProcessor.process(transaction);
@@ -27,7 +27,7 @@ export class TransactionsServiceImpl implements TransactionsService {
     return 'id';
   }
 
-  findByIdempotencyKey(_: string): Promise<Transaction> {
+  findByIdempotencyKey(_: string): Promise<TransactionEntity> {
     return Promise.resolve(undefined);
   }
 }

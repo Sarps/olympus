@@ -1,5 +1,5 @@
-import { Transaction } from '@domain/models/Transaction';
+import { TransactionEntity } from '@domain/models/entities/transaction.entity';
 
 export interface NewTransactionPublisherPort {
-  publish(transaction: Transaction): Promise<void>;
+  publish(transaction: TransactionEntity): Promise<void>;
 }

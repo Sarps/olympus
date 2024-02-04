@@ -1,7 +1,7 @@
-import { UserVerification } from "@domain/models/UserVerification";
+import { UserVerificationEntity } from "@domain/models/entities/user-verification.entity";
 
 export interface UserVerificationPersistencePort {
-  save(payload: UserVerification): Promise<void>;
+  save(payload: UserVerificationEntity): Promise<void>;
 
   findUserIdByOtpOrToken(otpOrToken: string): Promise<string>;
 }

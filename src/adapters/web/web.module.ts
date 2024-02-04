@@ -7,14 +7,16 @@ import {
 import { AuthController } from '@adapters/web/controllers/auth.controller';
 import { UsersController } from '@adapters/web/controllers/users.controller';
 import { UserProfilePort } from '@ports/in/users/user-profile.port';
-import { UserProfileUseCase } from '@domain/services/user-profile.use-case';
+import { UserProfileUseCase } from '@domain/services/users/user-profile.use-case';
 import { RegisterPort } from '@ports/in/auth/register.port';
-import { RegisterUseCase } from '@domain/services/register.use-case';
+import { RegisterUseCase } from '@domain/services/auth/register.use-case';
 import { PrismaModule } from '@adapters/prisma/prisma.module';
 import { PassportModule } from '@adapters/passport/passport.module';
 import { KafkaModule } from "@adapters/kafka/kafka.module";
 import { VerifyUserPort } from "@ports/in/users/verify-user.port";
-import { VerifyUserUseCase } from "@domain/services/verify-user.use-case";
+import { VerifyUserUseCase } from "@domain/services/users/verify-user.use-case";
+import { UserWalletBalanceUseCase } from "@domain/services/wallets/user-wallet-balance.use-case";
+import { UserWalletBalancePort } from "@ports/in/wallets/user-wallet-balance.port";
 
 @Module({
   controllers: [TransactionsController, AuthController, UsersController],
@@ -24,6 +26,7 @@ import { VerifyUserUseCase } from "@domain/services/verify-user.use-case";
     { provide: UserProfilePort, useClass: UserProfileUseCase },
     { provide: RegisterPort, useClass: RegisterUseCase },
     { provide: VerifyUserPort, useClass: VerifyUserUseCase },
+    { provide: UserWalletBalancePort, useClass: UserWalletBalanceUseCase },
   ],
 })
 export class WebModule {}

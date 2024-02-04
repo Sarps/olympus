@@ -1,35 +1,35 @@
 import { PrismaService } from '@adapters/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
-import { User } from '@domain/models/User';
+import { UserEntity } from '@domain/models/entities/user.entity';
 import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class UsersRepository implements UserPersistencePort {
   constructor(private prisma: PrismaService) {}
 
-  async save(user: User): Promise<User> {
+  async save(user: UserEntity): Promise<UserEntity> {
     const result = await this.prisma.user.create({
       data: this.fromModel(user),
     });
     return this.toModel(result)
   }
 
-  async update(user: User): Promise<void> {
+  async update(user: UserEntity): Promise<void> {
     await this.prisma.user.update({
       where: { id: user.id },
       data: this.fromModel(user),
     });
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserEntity> {
     const result = await this.prisma.user.findFirstOrThrow({
       where: { id },
     });
     return this.toModel(result);
   }
 
-  async findByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
+  async findByUsernameOrEmail(usernameOrEmail: string): Promise<UserEntity> {
     const result = await this.prisma.user.findFirstOrThrow({
       where: {
         OR: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
@@ -38,11 +38,11 @@ export class UsersRepository implements UserPersistencePort {
     return this.toModel(result);
   }
 
-  private toModel({ id, name, username, email, passwordHash, lastVerified }: Prisma.UserGetPayload<any>): User {
-    return new User(id, name, username, email, passwordHash, lastVerified);
+  private toModel({ id, name, username, email, passwordHash, lastVerified }: Prisma.UserGetPayload<any>): UserEntity {
+    return new UserEntity(id, name, username, email, passwordHash, lastVerified);
   }
 
-  private fromModel({ id, ...user }: User): Prisma.UserCreateInput {
+  private fromModel({ id, ...user }: UserEntity): Prisma.UserUncheckedCreateInput {
     return { ...user };
   }
 }

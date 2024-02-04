@@ -9,7 +9,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RequestUser } from '@adapters/passport/user.decorator';
-import { User } from '@domain/models/User';
+import { UserEntity } from '@domain/models/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { LoginGuard } from '@adapters/passport/guards';
 import { JWT_EXPIRES_IN } from '@adapters/constants';
@@ -28,7 +28,7 @@ export class AuthController {
   @ApiBody({ type: AuthLoginDto })
   @ApiResponse({ status: 200, description: 'Sign in successful' })
   @UseGuards(LoginGuard)
-  async login(@RequestUser() user: User) {
+  async login(@RequestUser() user: UserEntity) {
     const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),

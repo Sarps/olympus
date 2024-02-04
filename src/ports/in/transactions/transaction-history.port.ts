@@ -1,5 +1,5 @@
-import { Transaction } from '@domain/models/Transaction';
+import { TransactionEntity } from '@domain/models/entities/transaction.entity';
 
 export interface TransactionHistoryPort {
-  getUserTransactionHistory(): Promise<Transaction[]>;
+  getUserTransactionHistory(): Promise<TransactionEntity[]>;
 }

@@ -1,5 +1,5 @@
-import { User } from '@domain/models/User';
+import { UserEntity } from '@domain/models/entities/user.entity';
 
 export interface UserVerifiedPublisherPort {
-  publish(user: User): Promise<void>;
+  publish(user: UserEntity): Promise<void>;
 }

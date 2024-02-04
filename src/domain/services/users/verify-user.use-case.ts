@@ -1,0 +1,42 @@
+import { VerifyUserPort } from "@ports/in/users/verify-user.port";
+import { Inject } from "@nestjs/common";
+import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
+import { UserPersistencePort } from "@ports/out/persistence/user.persistence.port";
+import { UserVerifiedEventPort } from "@ports/out/events/user-verified.event.port";
+import { UserEntity } from "@domain/models/entities/user.entity";
+
+export class VerifyUserUseCase implements VerifyUserPort {
+
+  constructor(
+    @Inject(UserVerificationPersistencePort)
+    private userVerificationPersistence: UserVerificationPersistencePort,
+    @Inject(UserPersistencePort)
+    private userPersistence: UserPersistencePort,
+    @Inject(UserVerifiedEventPort)
+    private userVerifiedEventPort: UserVerifiedEventPort
+  ) {
+  }
+
+  async verifyByTokenOrOtp(token: string): Promise<boolean> {
+    try {
+      const userId = await this.userVerificationPersistence.findUserIdByOtpOrToken(token);
+      await this.fireEvent(await this.updateUserStatus(userId));
+      return true;
+    } catch (e) {
+      console.log("Error verifying user", e);
+    }
+    return false;
+  }
+
+  private async updateUserStatus(userId: string): Promise<UserEntity> {
+    const user = await this.userPersistence.findById(userId);
+    user.lastVerified = new Date();
+    await this.userPersistence.update(user);
+    return user
+  }
+
+  async fireEvent({ passwordHash: _, ...payload }: UserEntity) {
+    await this.userVerifiedEventPort.fire(payload);
+  }
+
+}

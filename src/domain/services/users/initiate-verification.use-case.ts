@@ -3,7 +3,7 @@ import secureRandom from "secure-random-string";
 import { VERIFY_URL } from "@adapters/constants";
 import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
 import { Inject } from "@nestjs/common";
-import { UserVerification } from "@domain/models/UserVerification";
+import { UserVerificationEntity } from "@domain/models/entities/user-verification.entity";
 import otp from 'otp-generator'
 
 export class InitiateVerificationUseCase implements InitiateUserVerificationPort {
@@ -19,7 +19,7 @@ export class InitiateVerificationUseCase implements InitiateUserVerificationPort
     const token = this.generateToken();
 
     await this.userVerificationPersistence.save(
-      UserVerification.newInstance(otp, token, userId)
+      UserVerificationEntity.newInstance(otp, token, userId)
     );
     await this.sendVerificationEmail(email, otp, token);
   }

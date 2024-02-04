@@ -4,7 +4,7 @@ import { PassportModule as ExternalPassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@adapters/passport/strategies/jwt.strategy';
 import { LocalStrategy } from '@adapters/passport/strategies/local.strategy';
 import { LoginPort } from '@ports/in/auth/login.port';
-import { LoginUseCase } from '@domain/services/login.use-case';
+import { LoginUseCase } from '@domain/services/auth/login.use-case';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_EXPIRES_IN, JWT_SECRET } from '@adapters/constants';
 

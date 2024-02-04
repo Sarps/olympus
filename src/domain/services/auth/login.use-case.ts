@@ -1,5 +1,5 @@
 import { LoginPort } from '@ports/in/auth/login.port';
-import { User } from '@domain/models/User';
+import { UserEntity } from '@domain/models/entities/user.entity';
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -9,7 +9,7 @@ export class LoginUseCase implements LoginPort {
     @Inject(UserPersistencePort) private userPersistence: UserPersistencePort,
   ) {}
 
-  async login(usernameOrEmail: string, password: string): Promise<User> {
+  async login(usernameOrEmail: string, password: string): Promise<UserEntity> {
     try {
       const user =
         await this.userPersistence.findByUsernameOrEmail(usernameOrEmail);
@@ -22,7 +22,7 @@ export class LoginUseCase implements LoginPort {
 
   private async isValidPassword(
     password: string,
-    user: User,
+    user: UserEntity,
   ): Promise<boolean> {
     return bcrypt.compare(password, user.passwordHash);
   }

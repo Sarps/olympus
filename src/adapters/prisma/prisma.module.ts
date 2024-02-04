@@ -6,6 +6,8 @@ import { UserPersistencePort } from '@ports/out/persistence/user.persistence.por
 import { UsersRepository } from '@adapters/prisma/repositories/users.repository';
 import { UserVerificationPersistencePort } from "@ports/out/persistence/user-verification.persistence.port";
 import { UserVerificationsRepository } from "@adapters/prisma/repositories/user-verifications.repository";
+import { WalletPersistencePort } from "@ports/out/persistence/wallet.persistence.port";
+import { WalletsRepository } from "@adapters/prisma/repositories/wallets.repository";
 
 @Module({
   providers: [
@@ -13,10 +15,12 @@ import { UserVerificationsRepository } from "@adapters/prisma/repositories/user-
     { provide: TransactionPersistencePort, useClass: TransactionsRepository },
     { provide: UserPersistencePort, useClass: UsersRepository },
     { provide: UserVerificationPersistencePort, useClass: UserVerificationsRepository },
+    { provide: WalletPersistencePort, useClass: WalletsRepository },
   ],
   exports: [
     UserPersistencePort,
-    UserVerificationPersistencePort
+    UserVerificationPersistencePort,
+    WalletPersistencePort
   ],
 })
 export class PrismaModule {}
