@@ -9,8 +9,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtGuard } from '@adapters/passport/guards';
 import { UserVerifiedGuard } from '@adapters/web/user-verified.guard';
+import { JwtGuard } from "@adapters/passport/guards/jwt.guard";
 
 @ApiTags('Transactions')
 @Controller('transactions')

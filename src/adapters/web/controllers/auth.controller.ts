@@ -11,7 +11,7 @@ import {
 import { RequestUser } from '@adapters/passport/user.decorator';
 import { UserEntity } from '@domain/models/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { LoginGuard } from '@adapters/passport/guards';
+import { LoginGuard } from '@adapters/passport/guards/local.guard';
 import { JWT_EXPIRES_IN } from '@adapters/constants';
 
 @ApiTags('Authentication')

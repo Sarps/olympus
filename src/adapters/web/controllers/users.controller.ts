@@ -18,10 +18,10 @@ import {
 } from "@nestjs/swagger";
 import { RequestUser } from '@adapters/passport/user.decorator';
 import { UserEntity } from '@domain/models/entities/user.entity';
-import { JwtGuard } from '@adapters/passport/guards';
 import { UserProfileResponseDto } from '@adapters/web/dto/user-profile.dto';
 import { UserVerifiedGuard } from '@adapters/web/user-verified.guard';
 import { AmountEntity } from "@domain/models/entities/amount.entity";
+import { JwtGuard } from "@adapters/passport/guards/jwt.guard";
 
 @ApiTags('Users')
 @Controller('users')
