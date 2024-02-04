@@ -17,7 +17,9 @@ import { TransactionRole } from '@domain/models/enums/transaction-role';
 import { TransactionStatus } from '@domain/models/enums/transaction-status';
 
 const walletInclude = {
-  include: { wallet: { include: { user: { select: { id: true, name: true } } } } },
+  include: {
+    wallet: { include: { user: { select: { id: true, name: true } } } },
+  },
 };
 
 type TransactionResult = Prisma.TransactionGetPayload<{
@@ -98,7 +100,7 @@ export class TransactionsRepository implements TransactionPersistencePort {
       narration: wallet.narration,
       role: TransactionRole[wallet.role],
       userId: wallet.wallet.user.id,
-      name: wallet.wallet.user.name
+      name: wallet.wallet.user.name,
     };
   }
 

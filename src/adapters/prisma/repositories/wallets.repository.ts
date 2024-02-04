@@ -1,6 +1,6 @@
 import { PrismaService } from '@adapters/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { Prisma, Currency as PrismaCurrency } from '@prisma/client';
+import { Currency as PrismaCurrency, Prisma } from '@prisma/client';
 import { WalletPersistencePort } from '@ports/out/persistence/wallet.persistence.port';
 import { WalletEntity } from '@domain/models/entities/wallet.entity';
 import { AmountEntity } from '@domain/models/entities/amount.entity';
@@ -9,6 +9,23 @@ import { Currency } from '@domain/models/enums/Currency';
 @Injectable()
 export class WalletsRepository implements WalletPersistencePort {
   constructor(private prisma: PrismaService) {}
+
+  async decreaseIncreaseBalance(
+    sourceUserId: string,
+    recipientUserId: string,
+    amount: number,
+  ): Promise<void> {
+    return this.prisma.$transaction(async (tx) => {
+      await this.prisma.wallet.update({
+        where: { userId: sourceUserId },
+        data: { balance: { decrement: amount } },
+      });
+      await this.prisma.wallet.update({
+        where: { userId: recipientUserId },
+        data: { balance: { increment: amount } },
+      });
+    });
+  }
 
   async save(wallet: WalletEntity): Promise<void> {
     await this.prisma.wallet.create({

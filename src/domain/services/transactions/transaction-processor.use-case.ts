@@ -5,11 +5,14 @@ import { TransactionSentEventPort } from '@ports/out/events/transaction-sent.eve
 import { TransactionFailedEventPort } from '@ports/out/events/transaction-failed.event.port';
 import { TransactionPersistencePort } from '@ports/out/persistence/transaction.persistence.port';
 import { TransactionStatus } from '@domain/models/enums/transaction-status';
+import { WalletPersistencePort } from '@ports/out/persistence/wallet.persistence.port';
 
 export class TransactionProcessorUseCase implements ITransactionProcessor {
   constructor(
     @Inject(TransactionPersistencePort)
     private transactionPersistence: TransactionPersistencePort,
+    @Inject(WalletPersistencePort)
+    private walletPersistence: WalletPersistencePort,
     @Inject(TransactionSentEventPort)
     private transactionSentEvent: TransactionSentEventPort,
     @Inject(TransactionFailedEventPort)
@@ -34,7 +37,11 @@ export class TransactionProcessorUseCase implements ITransactionProcessor {
     }
   }
 
-  async sendTransaction(transaction: TransactionEntity): Promise<boolean> {
-    return Promise.resolve(true);
+  async sendTransaction(transaction: TransactionEntity): Promise<void> {
+    return this.walletPersistence.decreaseIncreaseBalance(
+      transaction.sender.userId,
+      transaction.recipient.userId,
+      transaction.amount.amount,
+    );
   }
 }
