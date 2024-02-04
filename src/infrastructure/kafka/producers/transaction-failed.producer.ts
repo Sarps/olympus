@@ -9,7 +9,7 @@ export class TransactionFailedProducer implements TransactionFailedEventPort {
   constructor(private eventEmitter: EventEmitter2) {}
 
   async fire(payload: TransactionEntity): Promise<void> {
-    console.log(`Published Event: ${EVENTS.TRANSACTION_SENT}`, payload.id);
-    await this.eventEmitter.emitAsync(EVENTS.TRANSACTION_SENT, payload);
+    console.log(`Published Event: ${EVENTS.TRANSACTION_FAILED}`, payload.id);
+    await this.eventEmitter.emitAsync(EVENTS.TRANSACTION_FAILED, payload);
   }
 }

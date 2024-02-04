@@ -26,6 +26,7 @@ import { RequestUser } from '@infrastructure/passport/user.decorator';
 import { User } from '@prisma/client';
 import { PaginationDto } from '@infrastructure/web/dto/pagination.dto';
 import { TransactionResponseDto } from '@infrastructure/web/dto/transaction-response.dto';
+import { UserEntity } from '@domain/models/entities/user.entity';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -49,7 +50,7 @@ export class TransactionsController {
   @ApiConflictResponse({ description: 'Idempotency key is not unique' })
   postTransaction(
     @Body() dto: CreateTransactionDto,
-    @RequestUser() user: User,
+    @RequestUser() user: UserEntity,
   ) {
     if (user.id === dto.recipientId)
       throw new BadRequestException('You cannot make self-transfers');
@@ -62,7 +63,7 @@ export class TransactionsController {
   @Get()
   async getUserTransactionHistory(
     @Query() { page, perPage }: PaginationDto,
-    @RequestUser() user: User,
+    @RequestUser() user: UserEntity,
   ): Promise<TransactionResponseDto[]> {
     return (
       await this.transactionHistory.getUserTransactionHistory(
