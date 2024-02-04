@@ -35,25 +35,30 @@ describe('VerifyUserUseCase', () => {
   });
 
   it('should verify user successfully with valid token or OTP', async () => {
-    userVerificationPersistence.setup(i => i.findUserIdByOtpOrToken(token)).returnsAsync(userId);
-    userPersistence.setup(i => i.findById(userId)).returnsAsync(userEntity);
-    userPersistence.setup(i => i.update(It.IsAny())).returnsAsync(undefined);
-    userVerifiedEventPort.setup(i => i.fire(It.IsAny())).returnsAsync(undefined);
+    userVerificationPersistence
+      .setup((i) => i.findUserIdByOtpOrToken(token))
+      .returnsAsync(userId);
+    userPersistence.setup((i) => i.findById(userId)).returnsAsync(userEntity);
+    userPersistence.setup((i) => i.update(It.IsAny())).returnsAsync(undefined);
+    userVerifiedEventPort
+      .setup((i) => i.fire(It.IsAny()))
+      .returnsAsync(undefined);
 
     const result = await verifyUserUseCase.verifyByTokenOrOtp(token);
 
     expect(result).toBe(true);
-    userPersistence.verify(i =>
-        i.update(It.Is<UserEntity>(user => user.lastVerified !== undefined)),
+    userPersistence.verify(
+      (i) =>
+        i.update(It.Is<UserEntity>((user) => user.lastVerified !== undefined)),
       Times.Once(),
     );
-    userVerifiedEventPort.verify(i =>
-      i.fire(It.IsAny()), Times.Once(),
-    );
+    userVerifiedEventPort.verify((i) => i.fire(It.IsAny()), Times.Once());
   });
 
   it('should return false if verification fails', async () => {
-    userVerificationPersistence.setup(i => i.findUserIdByOtpOrToken('invalidToken')).throws(new Error('Verification failed'));
+    userVerificationPersistence
+      .setup((i) => i.findUserIdByOtpOrToken('invalidToken'))
+      .throws(new Error('Verification failed'));
 
     const result = await verifyUserUseCase.verifyByTokenOrOtp('invalidToken');
 
@@ -61,7 +66,9 @@ describe('VerifyUserUseCase', () => {
   });
 
   it('should handle exceptions and return false', async () => {
-    userVerificationPersistence.setup(i => i.findUserIdByOtpOrToken(token)).throws(new Error('Unexpected error'));
+    userVerificationPersistence
+      .setup((i) => i.findUserIdByOtpOrToken(token))
+      .throws(new Error('Unexpected error'));
 
     const result = await verifyUserUseCase.verifyByTokenOrOtp(token);
 

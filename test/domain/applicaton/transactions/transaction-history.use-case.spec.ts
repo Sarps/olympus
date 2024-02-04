@@ -23,10 +23,14 @@ describe('TransactionHistoryUseCase', () => {
     const perPage = 10;
 
     transactionPersistence
-      .setup(i => i.getUserTransactions(userId, page, perPage))
+      .setup((i) => i.getUserTransactions(userId, page, perPage))
       .returnsAsync(transactions);
 
-    const result = await underTest.getUserTransactionHistory(userId, page, perPage);
+    const result = await underTest.getUserTransactionHistory(
+      userId,
+      page,
+      perPage,
+    );
 
     expect(result).toEqual(transactions);
     expect(result.length).toBe(transactions.length);
@@ -35,17 +39,21 @@ describe('TransactionHistoryUseCase', () => {
   it('should handle pagination correctly', async () => {
     const page = 2;
     const perPage = 5;
-    
+
     const paginatedTransactions = [
       new Mock<TransactionEntity>().object(),
       new Mock<TransactionEntity>().object(),
     ];
 
     transactionPersistence
-      .setup(i => i.getUserTransactions(userId, page, perPage))
+      .setup((i) => i.getUserTransactions(userId, page, perPage))
       .returnsAsync(paginatedTransactions);
 
-    const result = await underTest.getUserTransactionHistory(userId, page, perPage);
+    const result = await underTest.getUserTransactionHistory(
+      userId,
+      page,
+      perPage,
+    );
 
     expect(result).toEqual(paginatedTransactions);
     expect(result.length).toBe(paginatedTransactions.length);

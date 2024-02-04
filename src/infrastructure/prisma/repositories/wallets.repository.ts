@@ -16,11 +16,11 @@ export class WalletsRepository implements WalletPersistencePort {
     amount: number,
   ): Promise<void> {
     return this.prisma.$transaction(async (tx) => {
-      await this.prisma.wallet.update({
+      await tx.wallet.update({
         where: { userId: sourceUserId },
         data: { balance: { decrement: amount } },
       });
-      await this.prisma.wallet.update({
+      await tx.wallet.update({
         where: { userId: recipientUserId },
         data: { balance: { increment: amount } },
       });

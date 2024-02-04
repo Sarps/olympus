@@ -18,10 +18,10 @@ describe('TransactionProcessorUseCase', () => {
   const transaction = TransactionEntity.newInstance(
     'senderId',
     'recipientId',
-    "idempotencyKey",
+    'idempotencyKey',
     Currency.USD,
-    10.00,
-    "narration"
+    10.0,
+    'narration',
   );
 
   beforeEach(() => {
@@ -39,50 +39,62 @@ describe('TransactionProcessorUseCase', () => {
 
   it('should process transaction successfully', async () => {
     walletPersistence
-      .setup(i =>
-        i.decreaseIncreaseBalance(transaction.sender.userId, transaction.recipient.userId, transaction.amount.amount)
+      .setup((i) =>
+        i.decreaseIncreaseBalance(
+          transaction.sender.userId,
+          transaction.recipient.userId,
+          transaction.amount.amount,
+        ),
       )
       .returnsAsync();
     transactionPersistence
-      .setup(i => i.updateStatus(transaction.id, TransactionStatus.SUCCESS))
+      .setup((i) => i.updateStatus(transaction.id, TransactionStatus.SUCCESS))
       .returnsAsync();
-    transactionSentEvent
-      .setup(i => i.fire(transaction))
-      .returnsAsync();
+    transactionSentEvent.setup((i) => i.fire(transaction)).returnsAsync();
 
     await underTest.process(transaction);
 
-    transactionPersistence.verify(i =>
-      i.updateStatus(transaction.id, TransactionStatus.SUCCESS), Times.Once()
+    transactionPersistence.verify(
+      (i) => i.updateStatus(transaction.id, TransactionStatus.SUCCESS),
+      Times.Once(),
     );
-    transactionSentEvent.verify(i =>
-      i.fire(transaction), Times.Once()
-    );
+    transactionSentEvent.verify((i) => i.fire(transaction), Times.Once());
   });
 
   it('should handle transaction failure', async () => {
     walletPersistence
-      .setup(i =>
-        i.decreaseIncreaseBalance(transaction.sender.userId, transaction.recipient.userId, transaction.amount.amount)
+      .setup((i) =>
+        i.decreaseIncreaseBalance(
+          transaction.sender.userId,
+          transaction.recipient.userId,
+          transaction.amount.amount,
+        ),
       )
       .throwsAsync(new Error('Internal transfer error'));
     transactionPersistence
-      .setup(
-      i => i.updateStatus(transaction.id, TransactionStatus.FAILED, 'Internal transfer error')
-    )
+      .setup((i) =>
+        i.updateStatus(
+          transaction.id,
+          TransactionStatus.FAILED,
+          'Internal transfer error',
+        ),
+      )
       .returnsAsync(undefined);
     transactionFailedEvent
-      .setup(i => i.fire(transaction))
+      .setup((i) => i.fire(transaction))
       .returnsAsync(undefined);
 
     await underTest.process(transaction);
 
-    transactionPersistence.verify(i =>
-      i.updateStatus(transaction.id, TransactionStatus.FAILED, 'Internal transfer error'),
-      Times.Once()
+    transactionPersistence.verify(
+      (i) =>
+        i.updateStatus(
+          transaction.id,
+          TransactionStatus.FAILED,
+          'Internal transfer error',
+        ),
+      Times.Once(),
     );
-    transactionFailedEvent.verify(i =>
-      i.fire(transaction), Times.Once()
-    );
+    transactionFailedEvent.verify((i) => i.fire(transaction), Times.Once());
   });
 });
