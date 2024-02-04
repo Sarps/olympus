@@ -1,13 +1,19 @@
-import { TransactionEntity } from "@domain/models/entities/transaction.entity";
-import { ITransactionProcessor } from "@domain/services/transactions/transaction-processor.interface";
-import { InitiateTransaction, InitiateTransactionPort } from "@ports/in/transactions/initiate-transaction.port";
-import { BadRequestException, ConflictException, Inject, UnprocessableEntityException } from "@nestjs/common";
-import { TransactionSentEventPort } from "@ports/out/events/transaction-sent.event.port";
-import { TransactionFailedEventPort } from "@ports/out/events/transaction-failed.event.port";
-import { WalletPersistencePort } from "@ports/out/persistence/wallet.persistence.port";
-import { Currency } from "@domain/models/enums/currency";
-import { TransactionPersistencePort } from "@ports/out/persistence/transaction.persistence.port";
-import { Prisma } from "@prisma/client";
+import { TransactionEntity } from '@domain/models/entities/transaction.entity';
+import { ITransactionProcessor } from '@domain/services/transactions/transaction-processor.interface';
+import {
+  InitiateTransaction,
+  InitiateTransactionPort,
+} from '@ports/in/transactions/initiate-transaction.port';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { WalletPersistencePort } from '@ports/out/persistence/wallet.persistence.port';
+import { Currency } from '@domain/models/enums/currency';
+import { TransactionPersistencePort } from '@ports/out/persistence/transaction.persistence.port';
+import { Prisma } from '@prisma/client';
 
 export class InitiateTransactionUseCase implements InitiateTransactionPort {
   constructor(
@@ -17,27 +23,9 @@ export class InitiateTransactionUseCase implements InitiateTransactionPort {
     private transactionPersistence: TransactionPersistencePort,
     @Inject(ITransactionProcessor)
     private transactionProcessor: ITransactionProcessor,
-    @Inject(TransactionSentEventPort)
-    private transactionSentEvent: TransactionSentEventPort,
-    @Inject(TransactionFailedEventPort)
-    private transactionFailedEvent: TransactionFailedEventPort
-  ) {
-  }
+  ) {}
 
   async initiateTransaction(payload: InitiateTransaction): Promise<void> {
-    const transaction = await this.createTransactionRecord(payload)
-    try {
-      await this.transactionProcessor.process(transaction);
-      // TODO: Update successful txn
-      await this.transactionSentEvent.fire(transaction);
-    } catch (e) {
-
-      // TODO: Update failed txn
-      await this.transactionFailedEvent.fire(transaction);
-    }
-  }
-
-  private async createTransactionRecord(payload: InitiateTransaction) {
     const transaction = TransactionEntity.newInstance(
       payload.senderId,
       payload.recipientId,
@@ -45,43 +33,44 @@ export class InitiateTransactionUseCase implements InitiateTransactionPort {
       await this.getWalletCurrency(
         payload.senderId,
         payload.recipientId,
-        payload.amount
+        payload.amount,
       ),
       payload.amount,
-      payload.narration
+      payload.narration,
     );
     try {
       transaction.id = await this.transactionPersistence.save(transaction);
-      return transaction;
+      await this.transactionProcessor.process(transaction);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002")
-        throw new ConflictException("Idempotency key already used");
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      )
+        throw new ConflictException('Idempotency key already used');
     }
   }
 
   private async getWalletCurrency(
     senderId: string,
     recipientId: string,
-    amount: number
+    amount: number,
   ): Promise<Currency> {
     let sender, recipient;
     try {
       [sender, recipient] = await Promise.all([
         this.walletPersistence.findByUserId(senderId),
-        this.walletPersistence.findByUserId(recipientId)
+        this.walletPersistence.findByUserId(recipientId),
       ]);
     } catch (e) {
       throw new BadRequestException(
-        "Provided sender or recipient does not exist"
+        'Provided sender or recipient does not exist',
       );
     }
     if (sender.balance.amount < amount)
-      throw new UnprocessableEntityException(
-        "Insufficient user balance"
-      );
+      throw new UnprocessableEntityException('Insufficient user balance');
     if (sender.balance.currency !== recipient.balance.currency)
       throw new UnprocessableEntityException(
-        "Cross-currency transfer is not unsupported"
+        'Cross-currency transfer is not unsupported',
       );
     return sender.balance.currency;
   }

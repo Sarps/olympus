@@ -1,10 +1,10 @@
 import {
   IsDecimal,
-  IsNotEmpty,
+  IsNotEmpty, IsNumber,
   IsOptional,
   IsPositive,
-  IsUUID,
-} from 'class-validator';
+  IsUUID
+} from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTransactionDto {
@@ -19,14 +19,8 @@ export class CreateTransactionDto {
     example: '10.20',
   })
   @IsPositive()
-  @IsDecimal({ decimal_digits: '0,2' })
+  @IsNumber({maxDecimalPlaces: 2})
   amount: number;
-  @ApiProperty({
-    description: 'Sender ID',
-    example: '3b526551-6062-43e7-aaf2-2363e45e55db',
-  })
-  @IsUUID()
-  senderId: string;
   @ApiProperty({
     description: 'Narration (as seen by sender)',
     example: 'Test transaction',

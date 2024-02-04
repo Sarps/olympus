@@ -9,13 +9,15 @@ import {
   Currency as PrismaCurrency,
   Prisma,
   TransactionRole as PrismaRole,
+  TransactionStatus as PrismaStatus,
 } from '@prisma/client';
 import { AmountEntity } from '@domain/models/entities/amount.entity';
 import { Currency } from '@domain/models/enums/currency';
 import { TransactionRole } from '@domain/models/enums/transaction-role';
+import { TransactionStatus } from '@domain/models/enums/transaction-status';
 
 const walletInclude = {
-  include: { wallet: { include: { user: { select: { id: true } } } } },
+  include: { wallet: { include: { user: { select: { id: true, name: true } } } } },
 };
 
 type TransactionResult = Prisma.TransactionGetPayload<{
@@ -51,6 +53,17 @@ export class TransactionsRepository implements TransactionPersistencePort {
     return transactions.map((t) => this.toModel(t, userId));
   }
 
+  async updateStatus(
+    id: string,
+    status: TransactionStatus,
+    statusReason?: string,
+  ): Promise<void> {
+    await this.prisma.transaction.update({
+      where: { id },
+      data: { status: PrismaStatus[status], statusReason },
+    });
+  }
+
   private toModel(
     result: TransactionResult,
     userId: string,
@@ -59,21 +72,21 @@ export class TransactionsRepository implements TransactionPersistencePort {
       result.id,
       userId,
       result.idempotencyKey,
+      TransactionStatus[result.status],
+      result.statusReason,
       new AmountEntity(Currency[result.currency], result.amount),
       result.wallets.map(this.toFulfilmentModel),
     );
   }
 
-  private fromModel({
-    idempotencyKey,
-    amount,
-    fulfilment,
-  }: TransactionEntity): Prisma.TransactionUncheckedCreateInput {
+  private fromModel(
+    txn: TransactionEntity,
+  ): Prisma.TransactionUncheckedCreateInput {
     return {
-      idempotencyKey,
-      amount: amount.amount,
-      currency: PrismaCurrency[amount.currency],
-      wallets: { create: fulfilment.map(this.fromFulfilmentModel) },
+      idempotencyKey: txn.idempotencyKey,
+      amount: txn.amount.amount,
+      currency: PrismaCurrency[txn.amount.currency],
+      wallets: { create: txn.fulfilment.map(this.fromFulfilmentModel) },
     };
   }
 
@@ -85,6 +98,7 @@ export class TransactionsRepository implements TransactionPersistencePort {
       narration: wallet.narration,
       role: TransactionRole[wallet.role],
       userId: wallet.wallet.user.id,
+      name: wallet.wallet.user.name
     };
   }
 
