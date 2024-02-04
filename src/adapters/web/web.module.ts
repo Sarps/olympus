@@ -17,6 +17,8 @@ import { VerifyUserPort } from "@ports/in/users/verify-user.port";
 import { VerifyUserUseCase } from "@domain/services/users/verify-user.use-case";
 import { UserWalletBalanceUseCase } from "@domain/services/wallets/user-wallet-balance.use-case";
 import { UserWalletBalancePort } from "@ports/in/wallets/user-wallet-balance.port";
+import { TransactionHistoryPort } from "@ports/in/transactions/transaction-history.port";
+import { TransactionHistoryUseCase } from "@domain/services/transactions/transaction-history.use-case";
 
 @Module({
   controllers: [TransactionsController, AuthController, UsersController],
@@ -27,6 +29,7 @@ import { UserWalletBalancePort } from "@ports/in/wallets/user-wallet-balance.por
     { provide: RegisterPort, useClass: RegisterUseCase },
     { provide: VerifyUserPort, useClass: VerifyUserUseCase },
     { provide: UserWalletBalancePort, useClass: UserWalletBalanceUseCase },
+    { provide: TransactionHistoryPort, useClass: TransactionHistoryUseCase },
   ],
 })
 export class WebModule {}

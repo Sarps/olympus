@@ -18,6 +18,7 @@ import { WalletsRepository } from "@adapters/prisma/repositories/wallets.reposit
     { provide: WalletPersistencePort, useClass: WalletsRepository },
   ],
   exports: [
+    TransactionPersistencePort,
     UserPersistencePort,
     UserVerificationPersistencePort,
     WalletPersistencePort

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, ParseIntPipe, Post, Query, UseGuards } from "@nestjs/common";
 import { TransactionsService } from '@domain/services/transactions.service';
 import { InitiateTransactionPort } from '@ports/in/transactions/initiate-transaction.port';
 import { TransactionHistoryPort } from '@ports/in/transactions/transaction-history.port';
@@ -11,6 +11,9 @@ import {
 } from '@nestjs/swagger';
 import { UserVerifiedGuard } from '@adapters/web/user-verified.guard';
 import { JwtGuard } from "@adapters/passport/guards/jwt.guard";
+import { RequestUser } from "@adapters/passport/user.decorator";
+import { User } from "@prisma/client";
+import { PaginationDto } from "@adapters/web/dto/pagination.dto";
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -18,21 +21,21 @@ import { JwtGuard } from "@adapters/passport/guards/jwt.guard";
 @ApiForbiddenResponse({ description: 'Forbidden' })
 @UseGuards(JwtGuard, UserVerifiedGuard)
 @ApiBearerAuth()
-export class TransactionsController
-  implements InitiateTransactionPort, TransactionHistoryPort
-{
+export class TransactionsController {
   constructor(
-    @Inject(TransactionsService)
-    private readonly transactionsPort: TransactionsService,
+    // @Inject(InitiateTransactionPort)
+    // private readonly initiateTransaction: InitiateTransactionPort,
+    @Inject(TransactionHistoryPort)
+    private readonly transactionHistory: TransactionHistoryPort
   ) {}
 
   @Post()
-  initiateTransaction(@Body() createTransactionDto: CreateTransactionDto) {
-    return this.transactionsPort.createTransaction(createTransactionDto as any);
+  postTransaction(@Body() createTransactionDto: CreateTransactionDto) {
+    // return this.initiateTransaction.initiateTransaction(createTransactionDto as any);
   }
 
   @Get()
-  getUserTransactionHistory() {
-    return this.transactionsPort.findByUserId();
+  getUserTransactionHistory(@Query() { page, perPage }: PaginationDto, @RequestUser() user: User) {
+    return this.transactionHistory.getUserTransactionHistory(user.id, +page || 1, +perPage || 10);
   }
 }

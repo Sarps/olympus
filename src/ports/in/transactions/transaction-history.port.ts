@@ -1,5 +1,7 @@
 import { TransactionEntity } from '@domain/models/entities/transaction.entity';
 
 export interface TransactionHistoryPort {
-  getUserTransactionHistory(): Promise<TransactionEntity[]>;
+  getUserTransactionHistory(userId: string, page: number, perPage: number): Promise<TransactionEntity[]>;
 }
+
+export const TransactionHistoryPort = Symbol("TransactionHistoryPort")
