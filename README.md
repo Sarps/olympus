@@ -197,7 +197,7 @@ Note: Transactions include a type to indicate whether it was a debit or credit a
 
 ## Potential Improvements
 
-- **Token Hashing / Encryption**: For added security, the OTP should be hashed before persisting into database just as was done for the password and verification done on the hash (This was skipped this in the interest of time)
+- **Token Hashing / Encryption**: For added security, the OTP should be hashed before persisting into database just as was done for the password and verification done on the hash
 
 
 - **Transaction Signing / Certification**: Implement digital signing of transactions to ensure data integrity and validity. Each transaction could be signed using the private key of the sender, and the signature can be verified using the public key.

@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@infrastructure/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
