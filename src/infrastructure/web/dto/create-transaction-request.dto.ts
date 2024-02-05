@@ -1,19 +1,8 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsUUID,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 
-export class CreateTransactionDto {
-  @ApiProperty({
-    description: 'Unique UUID for transaction',
-    example: 'a1d61baf-3299-4143-a523-069b8dc65671',
-  })
-  @IsUUID()
-  idempotencyKey: string;
+export class CreateTransactionRequestDto {
   @ApiProperty({
     description: 'Amount (maximum of 2 decimals)',
     example: '10.20',

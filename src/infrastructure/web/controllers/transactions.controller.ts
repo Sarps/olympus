@@ -2,20 +2,20 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
-  Inject,
+  Get, Headers,
+  Inject, ParseUUIDPipe,
   Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { InitiateTransactionPort } from '@ports/in/transactions/initiate-transaction.port';
 import { TransactionHistoryPort } from '@ports/in/transactions/transaction-history.port';
-import { CreateTransactionDto } from '@infrastructure/web/dto/create-transaction.dto';
+import { CreateTransactionRequestDto } from '@infrastructure/web/dto/create-transaction-request.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiConflictResponse,
-  ApiForbiddenResponse,
+  ApiForbiddenResponse, ApiHeader,
   ApiTags,
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
@@ -45,16 +45,23 @@ export class TransactionsController {
   @ApiUnprocessableEntityResponse({
     description: 'Cross-currency transfers not allowed or insufficient balance',
   })
+  @ApiHeader({
+    name: 'X-Idempotency-Key',
+    description: 'Unique UUID for transaction',
+    example: 'a1d61baf-3299-4143-a523-069b8dc65671'
+  })
   @ApiBadRequestResponse({ description: 'Invalid Recipient or sender' })
   @ApiConflictResponse({ description: 'Idempotency key is not unique' })
   postTransaction(
-    @Body() dto: CreateTransactionDto,
+    @Headers('X-Idempotency-Key') idempotencyKey: string,
+    @Body() dto: CreateTransactionRequestDto,
     @RequestUser() user: UserEntity,
   ) {
     if (user.id === dto.recipientId)
       throw new BadRequestException('You cannot make self-transfers');
     return this.initiateTransaction.initiateTransaction({
       ...dto,
+      idempotencyKey,
       senderId: user.id,
       senderName: user.name,
     });

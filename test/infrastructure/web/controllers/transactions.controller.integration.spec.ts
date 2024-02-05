@@ -5,7 +5,7 @@ import { InitiateTransactionPort } from '@ports/in/transactions/initiate-transac
 import { TransactionHistoryPort } from '@ports/in/transactions/transaction-history.port';
 import { JwtGuard } from '@infrastructure/passport/guards/jwt.guard';
 import { UserVerifiedGuard } from '@infrastructure/web/user-verified.guard';
-import { CreateTransactionDto } from '@infrastructure/web/dto/create-transaction.dto';
+import { CreateTransactionRequestDto } from '@infrastructure/web/dto/create-transaction-request.dto';
 import { TransactionResponseDto } from '@infrastructure/web/dto/transaction-response.dto';
 import { Mock } from 'moq.ts';
 import { UserEntity } from '@domain/models/entities/user.entity';
@@ -40,13 +40,13 @@ describe('TransactionsController', () => {
 
   describe('postTransaction', () => {
     it('should throw BadRequestException for self-transfers', () => {
-      const dto = new Mock<CreateTransactionDto>()
+      const dto = new Mock<CreateTransactionRequestDto>()
         .setup((i) => i.recipientId)
         .returns('1');
       const user = new Mock<UserEntity>().setup((i) => i.id).returns('1');
 
       expect(() =>
-        controller.postTransaction(dto.object(), user.object()),
+        controller.postTransaction("idempotencyKey", dto.object(), user.object()),
       ).toThrow(BadRequestException);
     });
   });

@@ -21,7 +21,8 @@ export class TransactionEntity {
     public statusReason: string | null,
     public amount: AmountEntity,
     public fulfilment: TransactionFulfilment[],
-  ) {}
+  ) {
+  }
 
   static newInstance(
     senderId: string,
@@ -79,5 +80,15 @@ export class TransactionEntity {
     return this.sender.userId === this.userId
       ? TransactionType.DEBIT
       : TransactionType.CREDIT;
+  }
+
+  toString(): string {
+    return JSON.stringify({
+      ...this,
+      fulfilment: undefined,
+      type: this.type,
+      sender: this.sender,
+      recipient: this.recipient
+    });
   }
 }

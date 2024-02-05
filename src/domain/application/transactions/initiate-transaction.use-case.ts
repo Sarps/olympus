@@ -64,8 +64,9 @@ export class InitiateTransactionUseCase implements InitiateTransactionPort {
         this.walletPersistence.findByUserId(recipientId),
       ]);
     } catch (e) {
+      console.log(e)
       throw new BadRequestException(
-        'Provided sender or recipient does not exist',
+        'Provided recipient does not exist or unverified',
       );
     }
     if (sender.balance.amount < amount)

@@ -2,7 +2,7 @@ import { Controller, Inject } from '@nestjs/common';
 import { EVENTS } from '@infrastructure/constants';
 import { UserEvent } from '@domain/models/events/user.event';
 import { CreateUserWalletPort } from '@ports/in/wallets/create-user-wallet.port';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 @Controller()
 export class CreateWalletConsumer {
@@ -12,7 +12,7 @@ export class CreateWalletConsumer {
   ) {}
 
   @EventPattern(EVENTS.USER_VERIFIED)
-  async handle(payload: UserEvent) {
+  async handle(@Payload() payload: UserEvent) {
     await this.createUserWallet.createUserWallet(payload.id);
   }
 }
