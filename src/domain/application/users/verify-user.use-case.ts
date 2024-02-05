@@ -4,6 +4,8 @@ import { UserVerificationPersistencePort } from '@ports/out/persistence/user-ver
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { UserVerifiedEventPort } from '@ports/out/events/user-verified.event.port';
 import { UserEntity } from '@domain/models/entities/user.entity';
+import * as console from 'console';
+import e from 'express';
 
 export class VerifyUserUseCase implements VerifyUserPort {
   constructor(
@@ -14,6 +16,14 @@ export class VerifyUserUseCase implements VerifyUserPort {
     @Inject(UserVerifiedEventPort)
     private userVerifiedEventPort: UserVerifiedEventPort,
   ) {}
+
+  verifyByOtp(token: string, user: UserEntity): Promise<boolean> {
+    return this.verifyByTokenOrOtp(token);
+  }
+
+  verifyByToken(token: string): Promise<boolean> {
+    return this.verifyByTokenOrOtp(token);
+  }
 
   async verifyByTokenOrOtp(token: string): Promise<boolean> {
     try {

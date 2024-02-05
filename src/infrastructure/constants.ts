@@ -14,3 +14,5 @@ export const EVENTS = {
 
 export const MAIL_HOST = 'localhost'
 export const MAIL_PORT = 1025
+
+export const INITIAL_WALLET_BALANCE = 1000

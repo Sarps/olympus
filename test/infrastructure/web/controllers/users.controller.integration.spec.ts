@@ -9,7 +9,7 @@ import { UserVerifiedGuard } from '@infrastructure/web/user-verified.guard';
 import { UserEntity } from '@domain/models/entities/user.entity';
 import { AmountEntity } from '@domain/models/entities/amount.entity';
 import { Currency } from '@domain/models/enums/currency';
-import { Mock } from 'moq.ts';
+import { It, Mock } from 'moq.ts';
 
 describe('UsersController', () => {
   let app: INestApplication;
@@ -17,7 +17,7 @@ describe('UsersController', () => {
 
   // Mock ports
   const mockUserProfilePort = { getUserProfile: jest.fn() };
-  const mockVerifyUserPort = { verifyByTokenOrOtp: jest.fn() };
+  const mockVerifyUserPort = { verifyByToken: jest.fn(), verifyByOtp: jest.fn() };
   const mockUserWalletBalancePort = { viewUserWalletBalance: jest.fn() };
 
   beforeEach(async () => {
@@ -50,7 +50,7 @@ describe('UsersController', () => {
         'Test User',
         'testuser',
         'test@example.com',
-        'password', new Date()
+        'password', new Date(),
       );
       mockUserProfilePort.getUserProfile.mockResolvedValue(user);
 
@@ -64,24 +64,35 @@ describe('UsersController', () => {
     });
   });
 
-  describe('verify', () => {
-    it('should verify the user', async () => {
-      const tokenOrCode = 'verification-token-or-code';
-      mockVerifyUserPort.verifyByTokenOrOtp.mockResolvedValue(undefined); // Assuming void return
+  describe('verifyViaOtp', () => {
+    it('should verify the user via otp', async () => {
+      const pin = 'code';
+      const userMock = new Mock<UserEntity>().object()
+      mockVerifyUserPort.verifyByOtp.mockResolvedValue(undefined);
 
-      await expect(usersController.verify(tokenOrCode)).resolves.toBeUndefined();
-      expect(mockVerifyUserPort.verifyByTokenOrOtp).toHaveBeenCalledWith(tokenOrCode);
+      await expect(usersController.verifyViaOtp({ pin }, userMock)).resolves.toBeUndefined();
+      expect(mockVerifyUserPort.verifyByOtp).toHaveBeenCalledWith(pin, userMock);
+    });
+  });
+
+  describe('verifyViaToken', () => {
+    it('should verify the user via link token', async () => {
+      const tokenOrCode = 'token';
+      mockVerifyUserPort.verifyByToken.mockResolvedValue(undefined);
+
+      await expect(usersController.verifyViaToken(tokenOrCode)).resolves.toContain("verified");
+      expect(mockVerifyUserPort.verifyByToken).toHaveBeenCalledWith(tokenOrCode);
     });
   });
 
   describe('viewUserWalletBalance', () => {
     it('should return the user wallet balance', async () => {
-      const user = new Mock<UserEntity>().setup(i => i.id).returns('1').object()
+      const user = new Mock<UserEntity>().setup(i => i.id).returns('1').object();
       const balance = new AmountEntity(Currency.USD, 100);
       mockUserWalletBalancePort.viewUserWalletBalance.mockResolvedValue(balance);
 
       const response = await usersController.viewUserWalletBalance(user);
-      
+
       expect(response).toEqual(balance);
       expect(mockUserWalletBalancePort.viewUserWalletBalance).toHaveBeenCalledWith(user.id);
     });
