@@ -20,9 +20,11 @@ For **real-time notifications**, it utilizes an **Event-Driven Architecture** wi
 
 Hexagonal Architecture, also known as **Ports and Adapters Architecture**, allows for the decoupling of application logic from external services like Kafka for messaging, Mailhog for email testing, Prisma as an ORM, and the specific choice of NestJS as the framework.
 
-This decoupling ensures that we could decide to replace *NestJs* with vanilla *ExpressJs*, the core application remains unaffected. Or, should the need arise to switch from *Kafka* to an internal *EventBus* or *RabbitMQ*, or from *Prisma* to *TypeORM*, these changes can be made with minimal impact on the business logic.
+This decoupling ensures that if we should decide to replace *NestJs* with vanilla *ExpressJs*, the core application remains unaffected. Or, should the need arise to switch from *Kafka* to an internal *EventBus* or *RabbitMQ*, or from *Prisma* to *TypeORM*, these changes can be made with minimal impact on the business logic.
 
 It divides the application into inside and outside parts. The inside part comprises the application's core logic (domain), while the outside part contains all the ways the outside world communicates with the application (ports and adapters/infrastructure).
+
+![Hexagonal Architecture](docs/assets/hexagonal.jpg?raw=true)
 
 ## Setup Instructions
 
