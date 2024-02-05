@@ -1,5 +1,8 @@
 # Project Olympus - Fintech Backend System Implementation
 
+### ⚠️ **Important: Please Read Introduction Before Proceeding To Setup**
+**Skipping directly to the setup section without a comprehensive understanding of the preceding content may lead to misunderstandings about the functionalities and design principles**
+
 ## Introduction
 
 This project implements a backend system for a fintech application designed to facilitate financial transactions between users.
