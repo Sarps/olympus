@@ -15,9 +15,10 @@ import { TransactionSentEventPort } from '@ports/out/events/transaction-sent.eve
 import { TransactionFailedEventPort } from '@ports/out/events/transaction-failed.event.port';
 import { TransactionSentProducer } from '@infrastructure/kafka/producers/transaction-sent.producer';
 import { TransactionFailedProducer } from '@infrastructure/kafka/producers/transaction-failed.producer';
+import { SmtpModule } from '@infrastructure/smtp/smtp.module';
 
 @Module({
-  imports: [PrismaModule, EventEmitterModule.forRoot()],
+  imports: [SmtpModule, PrismaModule, EventEmitterModule.forRoot()],
   providers: [
     VerifyUserConsumer,
     CreateWalletConsumer,
