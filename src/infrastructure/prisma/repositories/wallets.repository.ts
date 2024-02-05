@@ -62,7 +62,6 @@ export class WalletsRepository implements WalletPersistencePort {
       currency: PrismaCurrency[balance.currency],
       userId,
     };
-    console.log(payload, balance.currency);
     return payload;
   }
 }

@@ -31,9 +31,7 @@ export class VerifyUserUseCase implements VerifyUserPort {
         await this.userVerificationPersistence.findUserIdByOtpOrToken(token);
       await this.fireEvent(await this.updateUserStatus(userId));
       return true;
-    } catch (e) {
-      console.log('Error verifying user', e);
-    }
+    } catch (e) {}
     return false;
   }
 

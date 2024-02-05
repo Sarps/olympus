@@ -14,9 +14,7 @@ export class LoginUseCase implements LoginPort {
       const user =
         await this.userPersistence.findByUsernameOrEmail(usernameOrEmail);
       if (await this.isValidPassword(password, user)) return user;
-    } catch (e) {
-      // console.log('Failed retrieving user', e);
-    }
+    } catch (e) {}
     return null;
   }
 
