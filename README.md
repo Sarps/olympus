@@ -79,10 +79,11 @@ adapters/infrastructure).
 ### Testing The Flows
 
 - [Flow 1 (User Registration and Login)](#flow-1-user-registering-and-login)
-- [Flow 2 (User Verification)](#flow-2-user-verification)
-- [Flow 3 (Wallet Balance)](#flow-3-wallet-balance)
-- [Flow 4 (Initiate Transaction)](#flow-4-initiate-transaction)
-- [Flow 5 (Transaction History)](#flow-5-transaction-history)
+- [Flow 2 (User Profile)](#flow-2-user-profile)
+- [Flow 3 (User Verification)](#flow-3-user-verification)
+- [Flow 4 (Wallet Balance)](#flow-4-wallet-balance)
+- [Flow 5 (Initiate Transaction)](#flow-5-initiate-transaction)
+- [Flow 6 (Transaction History)](#flow-6-transaction-history)
 
 
 Start the application with `npm run start` and a swagger UI will be available at http://localhost:3000/swagger.html.
@@ -119,7 +120,17 @@ Content-Type: application/json
 
 Note: At this point, user is able to fetch profile but is unable to check balance or make transactions until verified
 
-#### Flow 2 (User Verification)
+#### Flow 2 (User Profile)
+
+- Make an API call to get user profile (*replace <access_token> with the token from login*)
+
+```http request
+GET http://localhost:3000/users/balance
+Content-Type: application/json
+Authorization: Bearer <access_token>
+```
+
+#### Flow 3 (User Verification)
 
 - Access the Mailhog web interface at `http://localhost:8025` to confirm that the verification email was received.
 
@@ -139,7 +150,7 @@ Authorization: Bearer <access_token>
 
 Note: At this point, a wallet will be created for the use in with currency defaulted to "USD" with an intial balance of 1000 for test purposes
 
-#### Flow 3 (Wallet Balance)
+#### Flow 4 (Wallet Balance)
 
 - Make an API call to get user balance (*replace <access_token> with the token from login*)
 
@@ -149,14 +160,34 @@ Content-Type: application/json
 Authorization: Bearer <access_token>
 ```
 
-#### Flow 4 (Initiate Transaction)
+#### Flow 5 (Initiate Transaction)
 
-- For transaction posting, 2 users are required. Hence we'll create another user for the purpose of the test
+- For transaction posting, 2 users are required. Hence, we'll create another user as the recipient (let's call it user 2)
+- Go through the user registration and verification flows from [User Registration](#flow-1-user-registering-and-login) and [User Verification](#flow-2-user-verification) flows using different name, username and email
+- Using the [User Profile](#flow-2-user-profile), copy the `id` of the user which will be used as recipient id
 
-#### Flow 5 (Transaction History)
+- Make an API call to post a transaction (*replace <access_token> with the token from login of user 1 and <recipient_id> with the id from profile of user 2*)
+
+```http request
+POST http://localhost:3000/transactions
+Content-Type: application/json
+Authorization: Bearer <access_token>
+
+{
+  "idempotencyKey": "a1d61baf-3299-4143-a523-069b8dc65671",
+  "amount": 10.2,
+  "narration": "Loan repayment to user 2",
+  "recipientId": "<recipient_id>,
+  "recipientNarration": "Loan repayment from user 1"
+}
+```
+
+- Access the Mailhog web interface at http://localhost:8025 or refresh to confirm that a successful transaction email was received.
+- Confirm by checking the [User Balance](#flow-4-wallet-balance) of user 1 as well as user 2 (Note: You will need to switch login to user 2 in order to check user 2's balance)
+
+#### Flow 6 (Transaction History)
 
 - Make an API call to get user transaction history (*replace <access_token> with the token from login*)
-
 ```http request
 GET http://localhost:3000/transactions
 Content-Type: application/json
