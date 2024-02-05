@@ -189,16 +189,28 @@ Authorization: Bearer <access_token>
 
 - Make an API call to get user transaction history (*replace <access_token> with the token from login*)
 ```http request
-GET http://localhost:3000/transactions
+GET http://localhost:3000/transactions?page=1&perPage=10
 Content-Type: application/json
 Authorization: Bearer <access_token>
 ```
+Note: Transactions include a type to indicate whether it was a debit or credit and an optional `sender` or `recipient` field depending on the indicated type.
 
 ## Potential Improvements
 
-1. **Token Hashing / Encryption**: For added security, the OTP should be hashed before persisting into database just as was done for the password and verification done on the hash (This was skipped this in the interest of time)
-2. **Transaction Signing / Certification**: Implement digital signing of transactions to ensure data integrity and validity. Each transaction could be signed using the private key of the sender, and the signature can be verified using the public key.
-3. **Service Health Metrics / Monitoring**: For observability and high availability's, a metrics endpoint must be exposed to monitor service health and all dependent infrastructure stack
-4. **Logging and Audit Trails**: Because this service handles financial transactions, it is important that there is a comprehensive audit trail for all user actions
-4. **API Gateway & Load Balancer Integration**: Use an API Gateway to manage and secure access to the backend service. This can provide benefits like rate limiting, API version management and CORS handling in a centralized manner and make it easier to scale and maintain the system
+- **Token Hashing / Encryption**: For added security, the OTP should be hashed before persisting into database just as was done for the password and verification done on the hash (This was skipped this in the interest of time)
+
+
+- **Transaction Signing / Certification**: Implement digital signing of transactions to ensure data integrity and validity. Each transaction could be signed using the private key of the sender, and the signature can be verified using the public key.
+
+
+- **Service Health Metrics / Monitoring**: For observability and high availability's, a metrics endpoint must be exposed to monitor service health and all dependent infrastructure stack
+
+
+- **Logging and Audit Trails**: Because this service handles financial transactions, it is important that there is a comprehensive audit trail for all user actions
+
+
+- **Cursor-Based Pagination**: Transaction history pagination could be better improved by using Cursor-based pagination over its Offset-based counterpart
+
+
+- **API Gateway & Load Balancer Integration**: Use an API Gateway to manage and secure access to the backend service. This can provide benefits like rate limiting, API version management and CORS handling in a centralized manner and make it easier to scale and maintain the system
 
