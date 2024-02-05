@@ -9,12 +9,11 @@ interface ITransactionReceivedEmailer {
 
 @Injectable()
 export class TransactionReceivedEmailer implements ITransactionReceivedEmailer {
-  constructor(private emailService: EmailService) {
-  }
+  constructor(private emailService: EmailService) {}
 
   async notify(email: string, transaction: TransactionEntity): Promise<void> {
-    const sender = transaction.sender
-    const recipient = transaction.recipient
+    const sender = transaction.sender;
+    const recipient = transaction.recipient;
     await this.emailService.sendEmail(
       email,
       `🎉 Hooray! You've Received Money from ${sender.name}!`,
@@ -40,5 +39,4 @@ The Project Olympus Team
       `,
     );
   }
-
 }

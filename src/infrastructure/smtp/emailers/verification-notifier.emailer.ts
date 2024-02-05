@@ -5,8 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class VerificationNotifierEmailer implements VerificationNotifierPort {
-  constructor(private emailService: EmailService) {
-  }
+  constructor(private emailService: EmailService) {}
 
   async notify(email: string, otp: string, token: string): Promise<void> {
     await this.emailService.sendEmail(
@@ -36,5 +35,4 @@ The Project Olympus Team
       `,
     );
   }
-
 }

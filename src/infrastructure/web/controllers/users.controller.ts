@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { VerifyUserPort } from '@ports/in/users/verify-user.port';
 import { UserProfilePort } from '@ports/in/users/user-profile.port';
 import { UserWalletBalancePort } from '@ports/in/wallets/user-wallet-balance.port';
 import {
-  ApiBearerAuth, ApiBody,
+  ApiBearerAuth,
+  ApiBody,
   ApiForbiddenResponse,
   ApiParam,
   ApiResponse,
@@ -29,8 +38,7 @@ export class UsersController {
     @Inject(VerifyUserPort) private readonly verifyUser: VerifyUserPort,
     @Inject(UserWalletBalancePort)
     private readonly userWalletBalance: UserWalletBalancePort,
-  ) {
-  }
+  ) {}
 
   @Get('profile')
   @UseGuards(JwtGuard)
@@ -58,7 +66,10 @@ export class UsersController {
     description: 'User has been verified successfully',
   })
   @UseGuards(JwtGuard)
-  async verifyViaOtp(@Body() { pin }: UserVerifyDto, @RequestUser() user: UserEntity) {
+  async verifyViaOtp(
+    @Body() { pin }: UserVerifyDto,
+    @RequestUser() user: UserEntity,
+  ) {
     await this.verifyUser.verifyByOtp(pin, user);
   }
 

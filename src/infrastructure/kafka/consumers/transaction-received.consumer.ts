@@ -12,8 +12,7 @@ export class TransactionReceivedConsumer {
     private transactionReceivedEmailer: TransactionReceivedEmailer,
     @Inject(UserPersistencePort)
     private userPersistence: UserPersistencePort,
-  ) {
-  }
+  ) {}
 
   @OnEvent(EVENTS.TRANSACTION_SENT, { async: true })
   async handle(payload: TransactionEntity) {

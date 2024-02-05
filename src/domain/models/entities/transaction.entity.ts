@@ -21,8 +21,7 @@ export class TransactionEntity {
     public statusReason: string | null,
     public amount: AmountEntity,
     public fulfilment: TransactionFulfilment[],
-  ) {
-  }
+  ) {}
 
   static newInstance(
     senderId: string,
@@ -43,7 +42,13 @@ export class TransactionEntity {
       null,
       amount,
       [
-        { role: TransactionRole.SENDER, amount, userId: senderId, narration, name: senderName },
+        {
+          role: TransactionRole.SENDER,
+          amount,
+          userId: senderId,
+          narration,
+          name: senderName,
+        },
         {
           role: TransactionRole.RECIPIENT,
           amount,

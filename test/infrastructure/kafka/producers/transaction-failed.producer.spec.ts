@@ -32,13 +32,16 @@ describe('TransactionFailedProducer', () => {
       Currency.USD,
       100,
       'narration',
-      'senderName'
+      'senderName',
     );
     payload.id = '123';
 
     await service.fire(payload);
 
-    expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(EVENTS.TRANSACTION_FAILED, payload);
+    expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+      EVENTS.TRANSACTION_FAILED,
+      payload,
+    );
     expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(1);
   });
 });

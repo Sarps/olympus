@@ -24,11 +24,19 @@ describe('UserVerifiedProducer', () => {
   });
 
   it('should emit the USER_VERIFIED event with the correct payload', async () => {
-    const payload: UserEvent = { id: '1', name: 'name', email: 'email', username: 'username' };
+    const payload: UserEvent = {
+      id: '1',
+      name: 'name',
+      email: 'email',
+      username: 'username',
+    };
 
     await service.fire(payload);
 
-    expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(EVENTS.USER_VERIFIED, payload);
+    expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+      EVENTS.USER_VERIFIED,
+      payload,
+    );
     expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(1);
   });
 });

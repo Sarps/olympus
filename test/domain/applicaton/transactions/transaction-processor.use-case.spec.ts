@@ -22,7 +22,7 @@ describe('TransactionProcessorUseCase', () => {
     Currency.USD,
     10.0,
     'narration',
-    'senderName'
+    'senderName',
   );
 
   beforeEach(() => {

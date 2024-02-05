@@ -9,7 +9,6 @@ interface IEmailService {
 
 @Injectable()
 export class EmailService implements IEmailService {
-
   private transporter: nodemailer.Transporter<SentMessageInfo>;
 
   constructor() {

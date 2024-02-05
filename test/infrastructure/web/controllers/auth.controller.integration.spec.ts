@@ -14,21 +14,28 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     mockRegisterPort = {
-      register: jest.fn().mockImplementation((dto) => Promise.resolve({ ...dto, id: 'some-id' })),
+      register: jest
+        .fn()
+        .mockImplementation((dto) =>
+          Promise.resolve({ ...dto, id: 'some-id' }),
+        ),
     };
 
     mockJwtService = {
-      sign: jest.fn().mockImplementation((payload) => `signed-token-for-${payload.sub}`),
+      sign: jest
+        .fn()
+        .mockImplementation((payload) => `signed-token-for-${payload.sub}`),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
-        {provide: RegisterPort, useValue: mockRegisterPort},
-        {provide: JwtService, useValue: mockJwtService},
+        { provide: RegisterPort, useValue: mockRegisterPort },
+        { provide: JwtService, useValue: mockJwtService },
       ],
     })
-      .overrideGuard(LoginGuard).useValue({ canActivate: (context: ExecutionContext) => true })
+      .overrideGuard(LoginGuard)
+      .useValue({ canActivate: (context: ExecutionContext) => true })
       .compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -76,9 +83,6 @@ describe('AuthController', () => {
         email: dto.email,
         password: dto.password,
       });
-
     });
   });
-
 });
-

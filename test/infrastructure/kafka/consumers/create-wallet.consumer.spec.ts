@@ -8,7 +8,7 @@ describe('CreateWalletConsumer', () => {
   let mockCreateUserWalletPort: Partial<CreateUserWalletPort>;
 
   beforeEach(async () => {
-    mockCreateUserWalletPort = { createUserWallet: jest.fn(), };
+    mockCreateUserWalletPort = { createUserWallet: jest.fn() };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -21,12 +21,19 @@ describe('CreateWalletConsumer', () => {
   });
 
   it('should call createUserWallet when handling USER_VERIFIED event', async () => {
-    const payload: UserEvent = { id: '1', name: 'name', email: 'email', username: 'username', lastVerified: new Date() }
+    const payload: UserEvent = {
+      id: '1',
+      name: 'name',
+      email: 'email',
+      username: 'username',
+      lastVerified: new Date(),
+    };
 
     await consumer.handle(payload);
 
-    expect(mockCreateUserWalletPort.createUserWallet).toHaveBeenCalledWith(payload.id);
+    expect(mockCreateUserWalletPort.createUserWallet).toHaveBeenCalledWith(
+      payload.id,
+    );
     expect(mockCreateUserWalletPort.createUserWallet).toHaveBeenCalledTimes(1);
   });
-
 });

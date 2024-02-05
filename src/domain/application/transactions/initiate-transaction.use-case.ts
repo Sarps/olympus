@@ -38,7 +38,7 @@ export class InitiateTransactionUseCase implements InitiateTransactionPort {
       payload.amount,
       payload.narration,
       payload.senderName,
-      payload.recipientNarration
+      payload.recipientNarration,
     );
     try {
       transaction.id = await this.transactionPersistence.save(transaction);

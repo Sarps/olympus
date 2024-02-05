@@ -8,5 +8,5 @@ export class UserVerifyDto {
   })
   @IsAlphanumeric()
   @IsNotEmpty()
-  pin: string
+  pin: string;
 }

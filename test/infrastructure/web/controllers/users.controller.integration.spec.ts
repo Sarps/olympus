@@ -17,7 +17,10 @@ describe('UsersController', () => {
 
   // Mock ports
   const mockUserProfilePort = { getUserProfile: jest.fn() };
-  const mockVerifyUserPort = { verifyByToken: jest.fn(), verifyByOtp: jest.fn() };
+  const mockVerifyUserPort = {
+    verifyByToken: jest.fn(),
+    verifyByOtp: jest.fn(),
+  };
   const mockUserWalletBalancePort = { viewUserWalletBalance: jest.fn() };
 
   beforeEach(async () => {
@@ -29,8 +32,10 @@ describe('UsersController', () => {
         { provide: UserWalletBalancePort, useValue: mockUserWalletBalancePort },
       ],
     })
-      .overrideGuard(JwtGuard).useValue({ canActivate: () => true })
-      .overrideGuard(UserVerifiedGuard).useValue({ canActivate: () => true })
+      .overrideGuard(JwtGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(UserVerifiedGuard)
+      .useValue({ canActivate: () => true })
       .compile();
 
     app = module.createNestApplication();
@@ -50,16 +55,19 @@ describe('UsersController', () => {
         'Test User',
         'testuser',
         'test@example.com',
-        'password', new Date(),
+        'password',
+        new Date(),
       );
       mockUserProfilePort.getUserProfile.mockResolvedValue(user);
 
       const response = await usersController.getUserProfile(user);
-      expect(response).toEqual(expect.objectContaining({
-        name: user.name,
-        username: user.username,
-        email: user.email,
-      }));
+      expect(response).toEqual(
+        expect.objectContaining({
+          name: user.name,
+          username: user.username,
+          email: user.email,
+        }),
+      );
       expect(mockUserProfilePort.getUserProfile).toHaveBeenCalledWith(user);
     });
   });
@@ -67,11 +75,16 @@ describe('UsersController', () => {
   describe('verifyViaOtp', () => {
     it('should verify the user via otp', async () => {
       const pin = 'code';
-      const userMock = new Mock<UserEntity>().object()
+      const userMock = new Mock<UserEntity>().object();
       mockVerifyUserPort.verifyByOtp.mockResolvedValue(undefined);
 
-      await expect(usersController.verifyViaOtp({ pin }, userMock)).resolves.toBeUndefined();
-      expect(mockVerifyUserPort.verifyByOtp).toHaveBeenCalledWith(pin, userMock);
+      await expect(
+        usersController.verifyViaOtp({ pin }, userMock),
+      ).resolves.toBeUndefined();
+      expect(mockVerifyUserPort.verifyByOtp).toHaveBeenCalledWith(
+        pin,
+        userMock,
+      );
     });
   });
 
@@ -80,22 +93,32 @@ describe('UsersController', () => {
       const tokenOrCode = 'token';
       mockVerifyUserPort.verifyByToken.mockResolvedValue(undefined);
 
-      await expect(usersController.verifyViaToken(tokenOrCode)).resolves.toContain("verified");
-      expect(mockVerifyUserPort.verifyByToken).toHaveBeenCalledWith(tokenOrCode);
+      await expect(
+        usersController.verifyViaToken(tokenOrCode),
+      ).resolves.toContain('verified');
+      expect(mockVerifyUserPort.verifyByToken).toHaveBeenCalledWith(
+        tokenOrCode,
+      );
     });
   });
 
   describe('viewUserWalletBalance', () => {
     it('should return the user wallet balance', async () => {
-      const user = new Mock<UserEntity>().setup(i => i.id).returns('1').object();
+      const user = new Mock<UserEntity>()
+        .setup((i) => i.id)
+        .returns('1')
+        .object();
       const balance = new AmountEntity(Currency.USD, 100);
-      mockUserWalletBalancePort.viewUserWalletBalance.mockResolvedValue(balance);
+      mockUserWalletBalancePort.viewUserWalletBalance.mockResolvedValue(
+        balance,
+      );
 
       const response = await usersController.viewUserWalletBalance(user);
 
       expect(response).toEqual(balance);
-      expect(mockUserWalletBalancePort.viewUserWalletBalance).toHaveBeenCalledWith(user.id);
+      expect(
+        mockUserWalletBalancePort.viewUserWalletBalance,
+      ).toHaveBeenCalledWith(user.id);
     });
   });
-
 });

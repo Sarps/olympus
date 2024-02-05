@@ -57,7 +57,7 @@ export class TransactionsController {
     return this.initiateTransaction.initiateTransaction({
       ...dto,
       senderId: user.id,
-      senderName: user.name
+      senderName: user.name,
     });
   }
 

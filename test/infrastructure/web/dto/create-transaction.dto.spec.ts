@@ -7,7 +7,7 @@ describe('CreateTransactionDto', () => {
   beforeEach(() => {
     validDto = new CreateTransactionDto();
     validDto.idempotencyKey = 'a1d61baf-3299-4143-a523-069b8dc65671';
-    validDto.amount = 10.20;
+    validDto.amount = 10.2;
     validDto.narration = 'Test transaction';
     validDto.recipientId = 'ccda952a-ad77-4a57-9c97-d4e28989a0e1';
     // recipientNarration is optional
@@ -32,7 +32,7 @@ describe('CreateTransactionDto', () => {
   });
 
   it('should fail validation if amount is not positive', async () => {
-    validDto.amount = -10.20;
+    validDto.amount = -10.2;
     const errors = await validate(validDto);
     expect(errors.length).toBeGreaterThan(0);
     expect(errors).toEqual(
@@ -88,5 +88,4 @@ describe('CreateTransactionDto', () => {
     const errors = await validate(validDto);
     expect(errors.length).toBe(0);
   });
-
 });

@@ -19,12 +19,20 @@ describe('TransactionsController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TransactionsController],
       providers: [
-        {provide: InitiateTransactionPort, useValue: mockInitiateTransactionPort},
-        {provide: TransactionHistoryPort, useValue: mockTransactionHistoryPort},
-      ]
+        {
+          provide: InitiateTransactionPort,
+          useValue: mockInitiateTransactionPort,
+        },
+        {
+          provide: TransactionHistoryPort,
+          useValue: mockTransactionHistoryPort,
+        },
+      ],
     })
-      .overrideGuard(JwtGuard).useValue({ canActivate: () => true })
-      .overrideGuard(UserVerifiedGuard).useValue({ canActivate: () => true })
+      .overrideGuard(JwtGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(UserVerifiedGuard)
+      .useValue({ canActivate: () => true })
       .compile();
 
     controller = module.get<TransactionsController>(TransactionsController);
@@ -33,28 +41,34 @@ describe('TransactionsController', () => {
   describe('postTransaction', () => {
     it('should throw BadRequestException for self-transfers', () => {
       const dto = new Mock<CreateTransactionDto>()
-        .setup(i => i.recipientId).returns('1');
-      const user = new Mock<UserEntity>()
-        .setup(i => i.id).returns('1');
+        .setup((i) => i.recipientId)
+        .returns('1');
+      const user = new Mock<UserEntity>().setup((i) => i.id).returns('1');
 
-      expect(() => controller.postTransaction(dto.object(), user.object()))
-        .toThrow(BadRequestException);
+      expect(() =>
+        controller.postTransaction(dto.object(), user.object()),
+      ).toThrow(BadRequestException);
     });
   });
 
   describe('getUserTransactionHistory', () => {
     it('should return an array of TransactionResponseDto', async () => {
-      const user = new Mock<UserEntity>()
-        .setup(i => i.id).returns('1');
+      const user = new Mock<UserEntity>().setup((i) => i.id).returns('1');
       const transactionResponse: TransactionResponseDto[] = [];
 
-      mockTransactionHistoryPort.getUserTransactionHistory.mockResolvedValue(transactionResponse);
+      mockTransactionHistoryPort.getUserTransactionHistory.mockResolvedValue(
+        transactionResponse,
+      );
 
-      const response = await controller.getUserTransactionHistory({ page: 1, perPage: 10 }, user.object());
+      const response = await controller.getUserTransactionHistory(
+        { page: 1, perPage: 10 },
+        user.object(),
+      );
 
       expect(response).toEqual(transactionResponse);
-      expect(mockTransactionHistoryPort.getUserTransactionHistory).toHaveBeenCalledWith('1', 1, 10);
+      expect(
+        mockTransactionHistoryPort.getUserTransactionHistory,
+      ).toHaveBeenCalledWith('1', 1, 10);
     });
   });
-
 });

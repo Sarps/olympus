@@ -8,12 +8,17 @@ describe('VerifyUserConsumer', () => {
   let mockInitiateUserVerificationPort: Partial<InitiateUserVerificationPort>;
 
   beforeEach(async () => {
-    mockInitiateUserVerificationPort = { initiateVerification: jest.fn().mockResolvedValue(undefined) }
+    mockInitiateUserVerificationPort = {
+      initiateVerification: jest.fn().mockResolvedValue(undefined),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         VerifyUserConsumer,
-        { provide: InitiateUserVerificationPort, useValue: mockInitiateUserVerificationPort, },
+        {
+          provide: InitiateUserVerificationPort,
+          useValue: mockInitiateUserVerificationPort,
+        },
       ],
     }).compile();
 
@@ -21,11 +26,21 @@ describe('VerifyUserConsumer', () => {
   });
 
   it('should call initiateVerification with the correct parameters when handling USER_REGISTERED event', async () => {
-    const payload: UserEvent = { id: '1', name: 'name', email: 'email', username: 'username', lastVerified: new Date() }
+    const payload: UserEvent = {
+      id: '1',
+      name: 'name',
+      email: 'email',
+      username: 'username',
+      lastVerified: new Date(),
+    };
 
     await consumer.handle(payload);
 
-    expect(mockInitiateUserVerificationPort.initiateVerification).toHaveBeenCalledWith(payload.id, payload.email);
-    expect(mockInitiateUserVerificationPort.initiateVerification).toHaveBeenCalledTimes(1);
+    expect(
+      mockInitiateUserVerificationPort.initiateVerification,
+    ).toHaveBeenCalledWith(payload.id, payload.email);
+    expect(
+      mockInitiateUserVerificationPort.initiateVerification,
+    ).toHaveBeenCalledTimes(1);
   });
 });

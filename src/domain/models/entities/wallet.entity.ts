@@ -10,6 +10,10 @@ export class WalletEntity {
   ) {}
 
   static newInstance(userId: string) {
-    return new WalletEntity(null, new AmountEntity(Currency.USD, INITIAL_WALLET_BALANCE), userId);
+    return new WalletEntity(
+      null,
+      new AmountEntity(Currency.USD, INITIAL_WALLET_BALANCE),
+      userId,
+    );
   }
 }

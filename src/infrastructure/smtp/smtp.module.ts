@@ -8,12 +8,11 @@ import { TransactionReceivedEmailer } from '@infrastructure/smtp/emailers/transa
   providers: [
     EmailService,
     TransactionReceivedEmailer,
-    { provide: VerificationNotifierPort, useClass: VerificationNotifierEmailer }
+    {
+      provide: VerificationNotifierPort,
+      useClass: VerificationNotifierEmailer,
+    },
   ],
-  exports: [
-    TransactionReceivedEmailer,
-    VerificationNotifierPort
-  ]
+  exports: [TransactionReceivedEmailer, VerificationNotifierPort],
 })
-export class SmtpModule {
-}
+export class SmtpModule {}

@@ -28,7 +28,7 @@ describe('InitiateVerificationUseCase', () => {
     verificationNotifier = new Mock<VerificationNotifierPort>();
     underTest = new InitiateVerificationUseCase(
       userVerificationPersistence.object(),
-      verificationNotifier.object()
+      verificationNotifier.object(),
     );
   });
 
@@ -37,8 +37,8 @@ describe('InitiateVerificationUseCase', () => {
       .setup((i) => i.save(It.IsAny()))
       .returnsAsync(undefined);
     verificationNotifier
-      .setup(i => i.notify(email, It.IsAny(), It.IsAny()))
-      .returnsAsync()
+      .setup((i) => i.notify(email, It.IsAny(), It.IsAny()))
+      .returnsAsync();
 
     await underTest.initiateVerification(userId, email);
 
@@ -59,6 +59,8 @@ describe('InitiateVerificationUseCase', () => {
         ),
       Times.Once(),
     );
-    verificationNotifier.verify(i => i.notify(email, '123456', 'secureRandomToken'))
+    verificationNotifier.verify((i) =>
+      i.notify(email, '123456', 'secureRandomToken'),
+    );
   });
 });

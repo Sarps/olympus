@@ -24,7 +24,7 @@ export class InitiateVerificationUseCase
     await this.userVerificationPersistence.save(
       UserVerificationEntity.newInstance(otp, token, userId),
     );
-    await this.verificationNotifier.notify(email, otp, token)
+    await this.verificationNotifier.notify(email, otp, token);
   }
 
   private generateOtp(): string {

@@ -52,7 +52,9 @@ describe('AuthRegisterDto', () => {
     const errors = await validate(dto);
     expect(errors.length).toBeGreaterThan(0);
     // Ensure there's an error related to passwordConfirmation mismatch
-    const passwordConfirmationError = errors.find((error) => error.property === 'passwordConfirmation');
+    const passwordConfirmationError = errors.find(
+      (error) => error.property === 'passwordConfirmation',
+    );
     expect(passwordConfirmationError).toBeDefined();
     expect(passwordConfirmationError.constraints.isEmpty).toBeDefined();
   });
