@@ -45,68 +45,47 @@ adapters/infrastructure).
 - Docker and Docker Compose
 - Node.js (preferably the latest LTS version)
 
-### Starting the Application
+### Setting 
 
-1. **Clone the Repository**
-
+1. Clone the Repository
    ```bash
    git clone https://github.com/Sarps/olympus
    cd olympus
    ```
 
-2. **Environment Configuration**
-
-   Create a `.env` file at the root of the project directory using a provided sample:
-
+2. Create a `.env` file at the root of the project directory using a provided sample:
     ```bash
    cp .env.example .env
     ```
 
-3. **Docker Compose**
-
-   Use Docker Compose to start the services defined in your `docker-compose.yml` file:
-
+3. Use Docker Compose to start the services defined in your `docker-compose.yml` file:
    ```bash
    docker-compose up -d
    ```
-
    This command starts all required services, including a Postgres database, a Kafka instance, and a Mailhog server.
 
-4. **Application Setup**
-
-   Install dependencies and run migrations:
-
+   
+4. Install dependencies and run migrations:
    ```bash
    npm install
    npx prisma migrate dev
    ```
 
-## Testing Instructions
+5. Run automated tests to ensure everything is set up correctly:
+   ```bash
+   npm run test
+   ```
 
-### Automated Tests
+### Manual Testing Instructions
 
-Run automated tests to ensure everything is set up correctly:
-
-```bash
-npm run test
-```
-
-### Manual Testing
-
-1. **Starting the Application**
-
-   Run the application using:
+Starting the Application**
 
    ```bash
    npm run start
    ```
-2. **Swagger UI**
+   A Swagger UI available at http://localhost:3000/swagger.html.
 
-   Explore the API and perform manual testing through the Swagger UI available at http://localhost:3000/swagger.html.
-   This interface provides a comprehensive and interactive documentation of all the endpoints, allowing you to execute
-   requests directly from your browser without the need for additional tools like Postman or cURL.
-
-### Test Flows
+**Test Flows**
 
 #### Flow 1 (User Registering and Login)
 
