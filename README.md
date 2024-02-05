@@ -106,15 +106,15 @@ Content-Type: application/json
 }
 ```
 
-- Verify user is created by logging in (Copy the access token from the login for the verification step)
+- Verify user is created by logging in (Copy the access token from this login for the next step)
 
 ```http request
-GET http://localhost:3000/auth/login
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
   "username": "johndoe",
-  "password": "ZL4IW90N7Wsn3IC!",
+  "password": "ZL4IW90N7Wsn3IC!"
 }
 ```
 
@@ -125,7 +125,7 @@ Note: At this point, user is able to fetch profile but is unable to check balanc
 - Make an API call to get user profile (*replace <access_token> with the token from login*)
 
 ```http request
-GET http://localhost:3000/users/balance
+GET http://localhost:3000/users/profile
 Content-Type: application/json
 Authorization: Bearer <access_token>
 ```
