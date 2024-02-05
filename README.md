@@ -45,7 +45,7 @@ adapters/infrastructure).
 - Docker and Docker Compose
 - Node.js (preferably the latest LTS version)
 
-### Setting 
+### Getting Ready For Tests
 
 1. Clone the Repository
    ```bash
@@ -71,21 +71,20 @@ adapters/infrastructure).
    npx prisma migrate dev
    ```
 
-5. Run automated tests to ensure everything is set up correctly:
+5. Run the automated tests to ensure everything is set up correctly:
    ```bash
    npm run test
    ```
 
-### Manual Testing Instructions
+### Testing The Flows
 
-Starting the Application**
-
+- Starting the application with
    ```bash
    npm run start
    ```
    A Swagger UI available at http://localhost:3000/swagger.html.
 
-**Test Flows**
+
 
 #### Flow 1 (User Registering and Login)
 
