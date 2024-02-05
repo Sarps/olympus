@@ -2,6 +2,7 @@ export type InitiateTransaction = {
   idempotencyKey: string;
   amount: number;
   senderId: string;
+  senderName: string;
   narration: string;
   recipientId: string;
   recipientNarration?: string;

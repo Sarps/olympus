@@ -9,9 +9,7 @@ export class VerificationNotifierEmailer implements VerificationNotifierPort {
   }
 
   async notify(email: string, otp: string, token: string): Promise<void> {
-    const verificationLink = `${VERIFY_URL}/${token}`;
-    console.log(`Sending email to: ${email}`);
-    this.emailService.sendEmail(
+    await this.emailService.sendEmail(
       email,
       'Welcome to Project Olympus by Opticash! Please Verify Your Account',
       `
@@ -23,7 +21,7 @@ To ensure your account's security and complete your registration, we need to ver
 Enter the OTP (One Time Password) on the verification page. Your OTP is ${otp} and is valid for 5 minutes or click on the verification link below.
 If you're unable to use the OTP, the link below will allow you to verify your email and is valid for 24 hours.
 
-${verificationLink}
+${VERIFY_URL}/${token}
 
 If you did not sign up for an Opticash account, please disregard this message or inform us at support@opticash.io. No further action is required from your side.
 
