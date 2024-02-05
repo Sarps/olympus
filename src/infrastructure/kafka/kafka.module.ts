@@ -17,13 +17,31 @@ import { TransactionSentProducer } from '@infrastructure/kafka/producers/transac
 import { TransactionFailedProducer } from '@infrastructure/kafka/producers/transaction-failed.producer';
 import { SmtpModule } from '@infrastructure/smtp/smtp.module';
 import { TransactionReceivedConsumer } from '@infrastructure/kafka/consumers/transaction-received.consumer';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { KafkaClientSymbol } from '@infrastructure/kafka/kafka-client.symbol';
+import { KAFKA_BROKER } from '@infrastructure/constants';
 
 @Module({
-  imports: [SmtpModule, PrismaModule, EventEmitterModule.forRoot()],
-  providers: [
+  controllers: [
     VerifyUserConsumer,
     CreateWalletConsumer,
     TransactionReceivedConsumer,
+  ],
+  imports: [
+    ClientsModule.register([
+      {
+        name: KafkaClientSymbol,
+        transport: Transport.KAFKA,
+        options: {
+          client: { brokers: [KAFKA_BROKER] },
+        },
+      },
+    ]),
+    SmtpModule,
+    PrismaModule,
+    EventEmitterModule.forRoot(),
+  ],
+  providers: [
     { provide: UserRegisteredEventPort, useClass: UserRegisteredProducer },
     { provide: UserVerifiedEventPort, useClass: UserVerifiedProducer },
     { provide: TransactionSentEventPort, useClass: TransactionSentProducer },

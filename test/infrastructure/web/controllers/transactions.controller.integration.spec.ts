@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, INestApplication } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { TransactionsController } from '@infrastructure/web/controllers/transactions.controller';
 import { InitiateTransactionPort } from '@ports/in/transactions/initiate-transaction.port';
 import { TransactionHistoryPort } from '@ports/in/transactions/transaction-history.port';

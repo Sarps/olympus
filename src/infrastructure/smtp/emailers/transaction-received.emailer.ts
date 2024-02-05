@@ -1,6 +1,5 @@
 import { EmailService } from '@infrastructure/smtp/email.service';
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from '@domain/models/entities/user.entity';
 import { TransactionEntity } from '@domain/models/entities/transaction.entity';
 
 interface ITransactionReceivedEmailer {

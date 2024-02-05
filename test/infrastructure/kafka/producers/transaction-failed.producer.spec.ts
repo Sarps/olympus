@@ -1,23 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { TransactionFailedProducer } from '@infrastructure/kafka/producers/transaction-failed.producer';
 import { TransactionEntity } from '@domain/models/entities/transaction.entity';
 import { EVENTS } from '@infrastructure/constants';
 import { Currency } from '@domain/models/enums/currency';
+import { ClientKafka } from '@nestjs/microservices';
+import { KafkaClientSymbol } from '@infrastructure/kafka/kafka-client.symbol';
+import { of } from 'rxjs';
 
 describe('TransactionFailedProducer', () => {
   let service: TransactionFailedProducer;
-  let mockEventEmitter: Partial<EventEmitter2>;
+  let mockEventEmitter: Partial<ClientKafka>;
 
   beforeEach(async () => {
     mockEventEmitter = {
-      emitAsync: jest.fn(),
+      emit: jest.fn().mockReturnValue(of(undefined)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TransactionFailedProducer,
-        { provide: EventEmitter2, useValue: mockEventEmitter },
+        { provide: KafkaClientSymbol, useValue: mockEventEmitter },
       ],
     }).compile();
 
@@ -38,10 +40,10 @@ describe('TransactionFailedProducer', () => {
 
     await service.fire(payload);
 
-    expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+    expect(mockEventEmitter.emit).toHaveBeenCalledWith(
       EVENTS.TRANSACTION_FAILED,
       payload,
     );
-    expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(1);
+    expect(mockEventEmitter.emit).toHaveBeenCalledTimes(1);
   });
 });

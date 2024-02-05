@@ -1,6 +1,5 @@
 import { InitiateUserVerificationPort } from '@ports/in/users/initiate-user-verification.port';
 import secureRandom from 'secure-random-string';
-import { VERIFY_URL } from '@infrastructure/constants';
 import { UserVerificationPersistencePort } from '@ports/out/persistence/user-verification.persistence.port';
 import { Inject } from '@nestjs/common';
 import { UserVerificationEntity } from '@domain/models/entities/user-verification.entity';

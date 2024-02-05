@@ -4,8 +4,6 @@ import { UserVerificationPersistencePort } from '@ports/out/persistence/user-ver
 import { UserPersistencePort } from '@ports/out/persistence/user.persistence.port';
 import { UserVerifiedEventPort } from '@ports/out/events/user-verified.event.port';
 import { UserEntity } from '@domain/models/entities/user.entity';
-import * as console from 'console';
-import e from 'express';
 
 export class VerifyUserUseCase implements VerifyUserPort {
   constructor(

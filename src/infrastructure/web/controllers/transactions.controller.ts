@@ -23,7 +23,6 @@ import {
 import { UserVerifiedGuard } from '@infrastructure/web/user-verified.guard';
 import { JwtGuard } from '@infrastructure/passport/guards/jwt.guard';
 import { RequestUser } from '@infrastructure/passport/user.decorator';
-import { User } from '@prisma/client';
 import { PaginationDto } from '@infrastructure/web/dto/pagination.dto';
 import { TransactionResponseDto } from '@infrastructure/web/dto/transaction-response.dto';
 import { UserEntity } from '@domain/models/entities/user.entity';
