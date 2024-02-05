@@ -177,7 +177,7 @@ Authorization: Bearer <access_token>
   "idempotencyKey": "a1d61baf-3299-4143-a523-069b8dc65671",
   "amount": 10.2,
   "narration": "Loan repayment to user 2",
-  "recipientId": "<recipient_id>,
+  "recipientId": "<recipient_id>",
   "recipientNarration": "Loan repayment from user 1"
 }
 ```
