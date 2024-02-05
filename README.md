@@ -78,12 +78,14 @@ adapters/infrastructure).
 
 ### Testing The Flows
 
-- Starting the application with
-   ```bash
-   npm run start
-   ```
-   A Swagger UI available at http://localhost:3000/swagger.html.
+- [Flow 1 (User Registration and Login)](#flow-1-user-registering-and-login)
+- [Flow 2 (User Verification)](#flow-2-user-verification)
+- [Flow 3 (Wallet Balance)](#flow-3-wallet-balance)
+- [Flow 4 (Initiate Transaction)](#flow-4-initiate-transaction)
+- [Flow 5 (Transaction History)](#flow-5-transaction-history)
 
+
+Start the application with `npm run start` and a swagger UI will be available at http://localhost:3000/swagger.html.
 
 
 #### Flow 1 (User Registering and Login)
