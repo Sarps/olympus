@@ -18,3 +18,5 @@ export const MAIL_HOST = process.env.MAIL_HOST;
 export const MAIL_PORT = +process.env.MAIL_PORT;
 
 export const INITIAL_WALLET_BALANCE = +process.env.INITIAL_WALLET_BALANCE;
+
+export const KAFKA_BROKER = process.env.KAFKA_BROKER
