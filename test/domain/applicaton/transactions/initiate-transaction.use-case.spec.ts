@@ -19,6 +19,7 @@ describe('InitiateTransactionUseCase', () => {
 
   const payload: InitiateTransaction = {
     senderId: 'senderId',
+    senderName: 'senderName',
     recipientId: 'recipientId',
     idempotencyKey: 'idempotencyKey',
     amount: 100,

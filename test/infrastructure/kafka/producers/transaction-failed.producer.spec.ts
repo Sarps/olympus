@@ -32,6 +32,7 @@ describe('TransactionFailedProducer', () => {
       Currency.USD,
       100,
       'narration',
+      'senderName'
     );
     payload.id = '123';
 
