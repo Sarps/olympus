@@ -5,6 +5,8 @@ import { AuthRegisterDto } from '@infrastructure/web/dto/auth-register.dto';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiConflictResponse,
+  ApiCreatedResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -37,7 +39,10 @@ export class AuthController {
   }
 
   @Post('register')
-  @ApiResponse({ status: 201, description: 'User has been created' })
+  @ApiCreatedResponse({ status: 201, description: 'User has been created' })
+  @ApiConflictResponse({
+    description: 'The username or email is already in use',
+  })
   register(@Body() dto: AuthRegisterDto) {
     return this.registerPort.register({
       name: dto.name,

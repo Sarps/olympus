@@ -9,7 +9,7 @@ import { UserVerifiedGuard } from '@infrastructure/web/user-verified.guard';
 import { UserEntity } from '@domain/models/entities/user.entity';
 import { AmountEntity } from '@domain/models/entities/amount.entity';
 import { Currency } from '@domain/models/enums/currency';
-import { It, Mock } from 'moq.ts';
+import { Mock } from 'moq.ts';
 
 describe('UsersController', () => {
   let app: INestApplication;

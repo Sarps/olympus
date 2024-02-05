@@ -1,6 +1,4 @@
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-
-require('dotenv').config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@infrastructure/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -18,8 +16,8 @@ async function bootstrap() {
         brokers: [KAFKA_BROKER],
       },
       consumer: {
-        groupId: 'olympus'
-      }
+        groupId: 'olympus',
+      },
     },
   });
 
@@ -32,6 +30,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger.html', app, document);
 
+  await app.startAllMicroservices();
   await app.listen(3000);
 }
 

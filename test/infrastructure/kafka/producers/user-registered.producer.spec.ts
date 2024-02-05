@@ -1,22 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserRegisteredProducer } from '@infrastructure/kafka/producers/user-registered.producer';
 import { EVENTS } from '@infrastructure/constants';
 import { UserEvent } from '@domain/models/events/user.event';
+import { KafkaClientSymbol } from '@infrastructure/kafka/kafka-client.symbol';
+import { ClientKafka } from '@nestjs/microservices';
+import { of } from 'rxjs';
 
 describe('UserRegisteredProducer', () => {
   let service: UserRegisteredProducer;
-  let mockEventEmitter: Partial<EventEmitter2>;
+  let mockEventEmitter: Partial<ClientKafka>;
 
   beforeEach(async () => {
     mockEventEmitter = {
-      emitAsync: jest.fn(),
+      emit: jest.fn().mockReturnValue(of(undefined)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserRegisteredProducer,
-        { provide: EventEmitter2, useValue: mockEventEmitter },
+        { provide: KafkaClientSymbol, useValue: mockEventEmitter },
       ],
     }).compile();
 
@@ -33,10 +35,10 @@ describe('UserRegisteredProducer', () => {
 
     await service.fire(payload);
 
-    expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+    expect(mockEventEmitter.emit).toHaveBeenCalledWith(
       EVENTS.USER_REGISTERED,
       payload,
     );
-    expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(1);
+    expect(mockEventEmitter.emit).toHaveBeenCalledTimes(1);
   });
 });

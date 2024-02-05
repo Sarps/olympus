@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from '@infrastructure/web/controllers/auth.controller';
 import { RegisterPort } from '@ports/in/auth/register.port';
 import { JwtService } from '@nestjs/jwt';
-import { ExecutionContext } from '@nestjs/common';
 import { LoginGuard } from '@infrastructure/passport/guards/local.guard';
 import { UserEntity } from '@domain/models/entities/user.entity';
 import { AuthRegisterDto } from '@infrastructure/web/dto/auth-register.dto';
@@ -35,7 +34,7 @@ describe('AuthController', () => {
       ],
     })
       .overrideGuard(LoginGuard)
-      .useValue({ canActivate: (context: ExecutionContext) => true })
+      .useValue({ canActivate: () => true })
       .compile();
 
     controller = module.get<AuthController>(AuthController);

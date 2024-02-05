@@ -21,29 +21,29 @@ services:
             - app
 
     zookeeper:
-        image: bitnami/zookeeper:latest
-        ports:
-            - '2181:2181'
+        image: confluentinc/cp-zookeeper:latest
         environment:
-            - ALLOW_ANONYMOUS_LOGIN=yes
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+            ALLOW_ANONYMOUS_LOGIN: yes
+        ports:
+            - '22181:2181'
         networks:
             - app
 
     kafka:
-        image: bitnami/kafka:latest
-        ports:
-            - '9092:9092'
-            - '9093:9093'
-        environment:
-            - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-            - ALLOW_PLAINTEXT_LISTENER=yes
-            - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-            - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-            - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-            - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093
-            - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+        image: confluentinc/cp-kafka:latest
         depends_on:
             - zookeeper
+        ports:
+            - '29092:29092'
+        environment:
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+            KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            TOPIC_AUTO_CREATE: true
         networks:
             - app
 

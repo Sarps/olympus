@@ -12,9 +12,7 @@ import { UserProfilePort } from '@ports/in/users/user-profile.port';
 import { UserWalletBalancePort } from '@ports/in/wallets/user-wallet-balance.port';
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiForbiddenResponse,
-  ApiParam,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
